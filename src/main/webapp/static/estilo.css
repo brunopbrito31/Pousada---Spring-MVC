@@ -1,0 +1,210 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
+header{
+    position:fixed;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color:whitesmoke;
+    z-index: 101;
+}
+
+header nav ul{
+    display: flex;
+    list-style: none;
+}
+
+.item-menu{
+    margin: 0 8px;
+}
+
+/*Colocar efeito*/
+.item-menu a{
+    text-decoration: none;
+    transition: 0.5s;
+    color: black;
+}
+
+.area-apres{
+    width: 100vw;
+    background-color:blue;
+    display: flex;
+    justify-content:center;
+    align-items:center;
+}
+.area-apres img {
+    width: 100%;
+    height: 60vh;
+}
+.area-apres .top-desc{
+    position: absolute;
+    background-color: rgba(68, 124, 126, 0.45);
+    box-sizing: border-box;
+    width: 45%;
+    height: 35%;
+    box-shadow: 1px 1px 5px black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    color: rgba(255, 255, 255, 0.751);
+    text-align: center;
+}
+
+.area-apres .top-desc h1{
+    font-size: 4em;
+}
+
+.area-apres-desc{
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.area-apres-desc p{
+    margin: 5px;
+}
+
+.area-apres-quar{
+    display: flex;
+    justify-content:center;
+    width: 0.8vw;
+    margin: 0 auto;
+}
+
+.item-quarto{
+    text-align: center;
+    margin: 0 20px;
+}
+
+.item-quarto img{
+    width: calc(100vw/3 - 100px);
+    height: calc(100vw/3 - 100px);
+}
+
+.area-mapa{
+    text-align: center;
+    font-size: 25px;
+}
+
+#gmap_canvas{
+    width:38vw;
+    height: calc(45vw/2);
+}
+
+.mapouter{
+    margin: 0 auto;
+}
+
+.quem-somos{
+    margin-top: 50px;
+}
+
+.quem-somos img{
+    width: 100vw;
+    height: 100vh;
+}
+
+#filtro-imagem{
+    position: absolute;
+    background-color:rgba(0, 255, 242, 0.15);
+    width: 25vw;
+    height: 100vh;
+    border-radius: 0 20% 20% 0;
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    color: rgba(255, 255, 255, 0.596);
+}
+
+.form-contato{
+    background-color:rgba(128, 0, 128, 0.158);
+    width: 75%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.596);
+    margin-top: 50px;
+    padding: 25px 0 25px 0;
+}
+
+.form-contato .campo-form input, textarea{
+    width: 100%;
+    margin: 2px auto;
+    background-color:rgba(128, 0, 128, 0.158);
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    border: 1px solid transparent;
+}
+
+
+.campo-submit input{
+    background-color:rgba(128, 0, 128, 0.158);
+    width: 150px;
+    color: white;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+.ativo{
+    color:aqua;
+    border-bottom: 1px solid aqua;
+}
+
+.container-galeria{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color:blue;
+}
+
+.msg-err-active{
+    display: block;
+}
+
+.msg-err-inactive{
+    display: none;
+}
+
+@media screen and (max-width: 1000px) {
+    .area-apres .top-desc{
+        width:75%;
+    }
+
+    #quartos{
+        display:flex;
+        flex-wrap: wrap;
+        width: 100vw;
+    }
+    .item-quarto{
+        height: 100vw;
+        margin-top: 40px;
+    }
+
+    .item-quarto img{
+        width: 80%;
+        height: 80%;
+    }
+
+    #gmap_canvas{
+        width:60vw;
+        height: calc(45vw);
+    }
+
+    #filtro-imagem{
+        width: 55vw;
+    }
+
+    .area-apres .top-desc{
+        height: 45%;
+    }
+}
