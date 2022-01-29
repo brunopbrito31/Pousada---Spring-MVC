@@ -1,5 +1,8 @@
 let mail  = document.querySelector('#inp-mai');
 let msgE  = document.querySelector('#msg-err-mai');
+let zipI  = document.querySelector('#zip-inp');
+
+// Tratamento Email
 
 mail.addEventListener('input',async ()=>{
 
@@ -14,6 +17,9 @@ mail.addEventListener('input',async ()=>{
         msgE.classList.add('msg-err-inactive');
     }    
 });
+
+
+// Tratamento Telefone
 
 /* Máscaras ER */
 function mascara(o,f){
@@ -38,4 +44,27 @@ window.onload = function(){
 		mascara( this, mtel );
 	}
 }
+
+// Tratamento CEP
+
+let street = document.getElementById('str-inp');
+let district = document.getElementById('dis-inp');
+let city = document.getElementById('cit-inp');
+let state = document.getElementById('sta-inp');
+
+zipI.addEventListener('change', async ()=>{
+    let response = await fetch(`http://viacep.com.br/ws/${zipI.value}/json/`);
+    let data = await response.json();
+    let status = response.status;
+
+    if(status === 200){
+        street.value = data.logradouro;
+        district.value = data.bairro;
+        city.value = data.localidade;
+        state.value = data.uf;
+    }
+    console.log(data);
+});
+
+
 

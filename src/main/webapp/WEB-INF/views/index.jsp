@@ -69,26 +69,55 @@
                 <div class="campo-form">
                     <form:input path="name" placeholder="Nome" />
                 </div>
+
                 <div class="campo-form" id="div-mai">
                     <form:input path="mail" placeholder="Seu Email" id="inp-mai"/>
                 </div>
+
+                <p id="msg-err-mai" style="background-color:red" class="msg-err-inactive">
+                    Atenção: Este Email já está cadastrado no sistema!
+                </p>
+
                 <div class="campo-form">
                     <form:select path="gender" placeholder="Sexo" >
                         <form:option value="0">Masculino</form:option>
                         <form:option value="1">Feminino</form:option>
                     </form:select>
                 </div>
-                <p id="msg-err-mai" style="background-color:red" class="msg-err-inactive">Atenção: Este Email já está cadastrado no sistema!</p>
+
                 <div class="campo-form">
                     <form:label path="birthDate">Data de Nascimento</form:label>
                     <form:input path="birthDate" type="date" placeholder="Data de Nascimento" />
                 </div>
+
                 <div class="campo-form">
-                    <form:input path="phone" id="pho-inp" placeholder="Telefone" maxlength="13"/>
+                    <form:input path="phone" id="pho-inp" placeholder="Telefone" maxlength="15"/>
                 </div>
+
                 <div class="campo-form">
-                    <form:input path="zipPostal" placeholder="Cep" />
+                    <form:input path="zipPostal" placeholder="Cep" id="zip-inp"/>
                 </div>
+
+                <div class="campo-form">
+                    <form:input path="street" placeholder="Logradouro" id="str-inp"/>
+                </div>
+
+                <div class="campo-form">
+                    <form:input path="district" placeholder="Bairro" id="dis-inp"/>
+                </div>
+
+                <div class="campo-form">
+                    <form:input path="city" placeholder="Cidade" id="cit-inp" />
+                </div>
+
+                <div class="campo-form">
+                    <form:input path="state" placeholder="Estado" id="sta-inp"/>
+                </div>
+
+                <div class="campo-form">
+                    <form:textarea path="message" placeholder="Deixe a sua mensagem" id="mesg-inp" /> 
+                </div>
+
                 <form:button>Cadastrar</form:button>
             </form:form>
         </div>

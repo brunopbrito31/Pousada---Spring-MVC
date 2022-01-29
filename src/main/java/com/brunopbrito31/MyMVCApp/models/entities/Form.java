@@ -1,5 +1,7 @@
 package com.brunopbrito31.MyMVCApp.models.entities;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,5 +24,20 @@ public class Form {
     private String phone;
 
     private String zipPostal;
+
+    private String street;
+
+    private String district;
+
+    private String city;
+
+    private String state;
+
+    private String message;
+
+    @Override
+    public String toString(){
+        return "name: "+name+" mail: "+mail+" gender: "+gender+" birth: "+birthDate+" phone: "+phone+" zip: "+zipPostal+" street: "+street+" district: "+district+" city: "+city+" state: "+state;
+    }
 
 }

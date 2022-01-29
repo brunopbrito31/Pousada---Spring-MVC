@@ -1,5 +1,6 @@
 package com.brunopbrito31.MyMVCApp.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.brunopbrito31.MyMVCApp.models.entities.User;
@@ -20,6 +21,12 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping
+    public ResponseEntity<List<User>> getAll(){
+        List<User> allUsers = userRepository.findAll();
+        return allUsers.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(allUsers);
+    }
+
+    @GetMapping("/search-by-id")
     public ResponseEntity<User> findUserById(@RequestParam("id") Long id){
         Optional<User> searchedUser = userRepository.findById(id);
         return searchedUser.isPresent() ? 

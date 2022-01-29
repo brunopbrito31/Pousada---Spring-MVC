@@ -175,6 +175,10 @@ header nav ul{
     display: none;
 }
 
+#mesg-inp{
+    
+}
+
 @media screen and (max-width: 1000px) {
     .area-apres .top-desc{
         width:75%;
