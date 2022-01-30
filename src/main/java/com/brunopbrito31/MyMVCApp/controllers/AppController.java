@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.brunopbrito31.MyMVCApp.models.auxiliar.FormConverter;
 import com.brunopbrito31.MyMVCApp.models.auxiliar.MailGenerator;
@@ -58,61 +61,80 @@ public class AppController {
         model.addAttribute("");
         return new ModelAndView("index");
     }
-
     
 
     @PostMapping
-    public ModelAndView goSave(@ModelAttribute("form") Form form, Model model) throws ParseException, IOException{
-        User userResult;
-        Optional<User> searchedUser = userRepository.findByMail(form.getMail());
+    public ModelAndView goSave(
+        @ModelAttribute("form") Form form,
+        Model model,
+        HttpServletRequest request
+    ) throws ParseException, IOException{
 
-        if(searchedUser.isPresent()){
-            userResult = searchedUser.get();
+        // Protection for excessive submits
+        Date opdate = (Date)request.getSession().getAttribute("DataProxRes");
 
-        }else{
-            Adress adressAux = Adress.builder()
-            .city(form.getCity()).country("Brasil").district(form.getDistrict())
-            .state(form.getState()).street(form.getStreet()).zipCode(form.getZipPostal()).build();
-            adressAux = adressRespository.save(adressAux);
-            // Phone Tratament
-            Phone phoneAux = FormConverter.phoneMounterNoContentUser(form);
-            // Date Tratament
-            Date formatedDate = FormConverter.StringToDate(form.getBirthDate());
-            
-            userResult = User.builder()
-            .adress(adressAux).birthDate(formatedDate)
-            .gender(Gender.intToGender(form.getGender()))
-            .mail(form.getMail()).name(form.getName()).build();
-            
-            userResult = userRepository.save(userResult);
-
-            phoneAux.setUser(userResult);
-            phoneAux = phoneRepository.save(phoneAux);
-
-            userResult.setPhones(new ArrayList<>());
-            userResult.getPhones().add(phoneAux);
+        if(opdate == null){
+            request.getSession().setAttribute("DataProxRes",Date.from(Instant.now()));
+            opdate = (Date)request.getSession().getAttribute("DataProxRes");
         }
+        Long now = Date.from(Instant.now()).getTime();
+        Long proRes = opdate.getTime(); 
 
-        Contact contact = Contact.builder().msg(form.getMessage())
-        .sendDate(Date.from(Instant.now())).user(userResult).build();
-        contact = contactRepository.save(contact);
-
-        MailGenerator.sendMail(
-            "Olá "+userResult.getName()+" recebemos a sua mensagem e em até 2 dias úteis um de nossos consultores irá realizar contato contigo.", 
-            "Pousada Secreta: Mensagem Recebida Com Sucesso!", 
-            "brunopbrito31@gmail.com", 
-            System.getenv("Mailer_Password"), 
-            userResult.getMail(), 
-            "", 
-            ""
-        );
-
-        // model.addAttribute("form",new Form());
-        // model.addAttribute("quartos", productRepository.findAll());
-
-        //Redirecionar para uma tela de cadastro efetivado com sucesso
-
-        return new ModelAndView("form-sucess");
+        if(proRes <= now ){
+            User userResult;
+            Optional<User> searchedUser = userRepository.findByMail(form.getMail());
+    
+            if(searchedUser.isPresent()){
+                userResult = searchedUser.get();
+    
+            }else{
+                Adress adressAux = Adress.builder()
+                .city(form.getCity()).country("Brasil").district(form.getDistrict())
+                .state(form.getState()).street(form.getStreet()).zipCode(form.getZipPostal()).build();
+                adressAux = adressRespository.save(adressAux);
+                // Phone Tratament
+                Phone phoneAux = FormConverter.phoneMounterNoContentUser(form);
+                // Date Tratament
+                Date formatedDate = FormConverter.StringToDate(form.getBirthDate());
+                
+                userResult = User.builder()
+                .adress(adressAux).birthDate(formatedDate)
+                .gender(Gender.intToGender(form.getGender()))
+                .mail(form.getMail()).name(form.getName()).build();
+                
+                userResult = userRepository.save(userResult);
+    
+                phoneAux.setUser(userResult);
+                phoneAux = phoneRepository.save(phoneAux);
+    
+                userResult.setPhones(new ArrayList<>());
+                userResult.getPhones().add(phoneAux);
+            }
+    
+            Contact contact = Contact.builder().msg(form.getMessage())
+            .sendDate(Date.from(Instant.now())).user(userResult).build();
+            contact = contactRepository.save(contact);
+    
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(Date.from(Instant.now()));
+            cal.add(Calendar.MINUTE,1);
+    
+            request.getSession().setAttribute("DataProxRes", cal.getTime());
+    
+            MailGenerator.sendMail(
+                "Olá "+userResult.getName()+" recebemos a sua mensagem e em até 2 dias úteis um de nossos consultores irá realizar contato contigo.", 
+                "Pousada Secreta: Mensagem Recebida Com Sucesso!", 
+                "brunopbrito31@gmail.com", 
+                System.getenv("Mailer_Password"), 
+                userResult.getMail(), 
+                "", 
+                ""
+            );
+            model.addAttribute("form",new Form());
+           
+            return new ModelAndView("form-sucess");
+        }
+        return new ModelAndView("form-fail");
     }
     
 }

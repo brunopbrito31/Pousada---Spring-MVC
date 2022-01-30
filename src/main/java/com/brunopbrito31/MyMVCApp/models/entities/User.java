@@ -45,6 +45,9 @@ public class User {
     @Column(name= "data_nascimento", nullable = false)
     private Date birthDate;
 
+    @Column(name= "senha")
+    private String password;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Phone> Phones;
 

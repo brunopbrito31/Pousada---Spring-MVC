@@ -22,6 +22,10 @@ header nav ul{
     margin: 0 8px;
 }
 
+#area-res-link{
+    margin-left: 5px;
+}
+
 /*Colocar efeito*/
 .item-menu a{
     text-decoration: none;
@@ -181,6 +185,13 @@ header nav ul{
 
 #area-inf{
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#area-inf .container-principal{
+    flex-grow: 1;
 }
 
 @media screen and (max-width: 1000px) {

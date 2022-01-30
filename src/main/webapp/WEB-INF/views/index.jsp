@@ -3,10 +3,10 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <%-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> --%>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pousada BrunoPBrito31</title>
     <link rel="stylesheet" href="/static/estilo.css">
@@ -99,7 +99,7 @@
                     <form:textarea path="message" placeholder="Deixe a sua mensagem" id="mesg-inp" /> 
                 </div>
 
-                <form:button>Cadastrar</form:button>
+                <form:button id="bt-submit">Cadastrar</form:button>
             </form:form>
         </div>
         <div class="quem-somos" id="sobre">

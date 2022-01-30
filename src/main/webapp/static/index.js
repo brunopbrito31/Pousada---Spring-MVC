@@ -67,4 +67,16 @@ zipI.addEventListener('change', async ()=>{
 });
 
 
+// Protection FORM Sends
+let btSend = document.querySelector('#bt-submit');
+let frCadr = document.querySelector('#frmForm');
+var onSubm = false;
+
+frCadr.addEventListener('submit',(evt)=>{
+    if(onSubm){
+        evt.preventDefault();
+    }else{
+        onSubm = true;
+    }
+})
 
