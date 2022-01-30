@@ -1,12 +1,14 @@
 package com.brunopbrito31.MyMVCApp.controllers;
 
+import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
+import com.brunopbrito31.MyMVCApp.models.auxiliar.FormConverter;
+import com.brunopbrito31.MyMVCApp.models.auxiliar.MailGenerator;
 import com.brunopbrito31.MyMVCApp.models.entities.Adress;
 import com.brunopbrito31.MyMVCApp.models.entities.Contact;
 import com.brunopbrito31.MyMVCApp.models.entities.Form;
@@ -57,33 +59,31 @@ public class AppController {
         return new ModelAndView("index");
     }
 
+    
+
     @PostMapping
-    public ModelAndView goSave(@ModelAttribute("form") Form form, Model model) throws ParseException{
+    public ModelAndView goSave(@ModelAttribute("form") Form form, Model model) throws ParseException, IOException{
         User userResult;
         Optional<User> searchedUser = userRepository.findByMail(form.getMail());
 
         if(searchedUser.isPresent()){
             userResult = searchedUser.get();
+
         }else{
             Adress adressAux = Adress.builder()
             .city(form.getCity()).country("Brasil").district(form.getDistrict())
             .state(form.getState()).street(form.getStreet()).zipCode(form.getZipPostal()).build();
             adressAux = adressRespository.save(adressAux);
-
             // Phone Tratament
-            String areaCode = form.getPhone().substring(1,3);
-            String phonePt1 = form.getPhone().substring(5,10);
-            String phonePt2 = form.getPhone().substring(11);
-            String phoneRec = phonePt1.concat(phonePt2).trim();
-            Phone phoneAux = Phone.builder().areaCode(areaCode).number(phoneRec).build();
-
+            Phone phoneAux = FormConverter.phoneMounterNoContentUser(form);
             // Date Tratament
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd"); 
-            Date formatedDate = format.parse(form.getBirthDate()); 
-
+            Date formatedDate = FormConverter.StringToDate(form.getBirthDate());
+            
             userResult = User.builder()
             .adress(adressAux).birthDate(formatedDate)
-            .gender(Gender.intToGender(form.getGender())).mail(form.getMail()).name(form.getName()).build();
+            .gender(Gender.intToGender(form.getGender()))
+            .mail(form.getMail()).name(form.getName()).build();
+            
             userResult = userRepository.save(userResult);
 
             phoneAux.setUser(userResult);
@@ -97,9 +97,22 @@ public class AppController {
         .sendDate(Date.from(Instant.now())).user(userResult).build();
         contact = contactRepository.save(contact);
 
-        model.addAttribute("form",new Form());
-        model.addAttribute("quartos", productRepository.findAll());
-        return new ModelAndView("index");
+        MailGenerator.sendMail(
+            "Olá "+userResult.getName()+" recebemos a sua mensagem e em até 2 dias úteis um de nossos consultores irá realizar contato contigo.", 
+            "Pousada Secreta: Mensagem Recebida Com Sucesso!", 
+            "brunopbrito31@gmail.com", 
+            System.getenv("Mailer_Password"), 
+            userResult.getMail(), 
+            "", 
+            ""
+        );
+
+        // model.addAttribute("form",new Form());
+        // model.addAttribute("quartos", productRepository.findAll());
+
+        //Redirecionar para uma tela de cadastro efetivado com sucesso
+
+        return new ModelAndView("form-sucess");
     }
     
 }

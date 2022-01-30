@@ -12,33 +12,14 @@
     <link rel="stylesheet" href="/static/estilo.css">
 </head>
 <body>
-    <header>
-        <div>
-            <b>Pousada</b> Secreta
-        </div>
-        <nav>
-            <ul>
-                <li class="item-menu"><a href="#quartos" id="link-quartos">Quartos</a></li>
-                <li class="item-menu"><a href="#mapa" id="link-mapa">Rota</a></li>
-                <li class="item-menu"><a href="#sobre" id="link-sobre">Sobre</a></li>
-            </ul>
-        </nav>
-    </header>
-    <section class="area-apres">
-        <section class="top-desc">
-            <h1>Pousada Secreta</h1>
-            <p>Paz e muita diversão no mesmo lugar</p>
-        </section>
-        <img src="/static/assets/img/top.jpg">
-    </section>
+    <jsp:include page="/WEB-INF/views/includes/inc-top-home.jsp" />
+    <jsp:include page="/WEB-INF/views/includes/inc-top-desta.jsp" />
     <main>
         <section class="area-apres-desc">
             <h2>SEJA BEM-VINDO(A)!</h2>
             <p>Os melhores quartos você encontra aqui</p>
             <p>Confira alguns.</p>
         </section>
-
-        
 
         <section class="area-apres-quar" id="quartos">
             <c:forEach items="${quartos}" var="quarto">
@@ -126,5 +107,6 @@
         </div>
     </div>
     <script src="/static/index.js" defer></script>
+    <script src="/static/visual.js" defer></script>
 </body>
 </html>

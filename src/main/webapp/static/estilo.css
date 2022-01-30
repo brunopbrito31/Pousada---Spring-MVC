@@ -179,6 +179,10 @@ header nav ul{
     
 }
 
+#area-inf{
+    text-align: center;
+}
+
 @media screen and (max-width: 1000px) {
     .area-apres .top-desc{
         width:75%;
