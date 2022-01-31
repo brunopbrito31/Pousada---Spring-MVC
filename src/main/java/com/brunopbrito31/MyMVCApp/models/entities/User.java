@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.brunopbrito31.MyMVCApp.models.entities.enums.Authorization;
 import com.brunopbrito31.MyMVCApp.models.entities.enums.Gender;
 
 import lombok.AllArgsConstructor;
@@ -47,6 +48,9 @@ public class User {
 
     @Column(name= "senha")
     private String password;
+
+    @Column(name= "nivel_autorizacao")
+    private Authorization autho;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Phone> Phones;

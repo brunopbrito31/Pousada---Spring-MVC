@@ -1,0 +1,180 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+main{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items:center;
+}
+
+.area-filtro{
+    margin: 10vh;
+    display: flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.area-filtro input, .area-filtro button{
+    border: 1px solid red;
+    border-radius: 0 10px 10px 0;
+    font-size: 20px;
+    text-align: center;
+    color: red;
+}
+
+.area-filtro button{
+    border-radius: 0;
+    margin-left: -14px;
+    border-left: none;
+    color:white;
+    background-color:red;
+    border-radius: 0 10px 10px 0;
+    font-size: 20px;
+}
+
+table thead th{
+    border-bottom: 1px dashed red;
+}
+
+table tbody tr td{
+    border-bottom: 1px dashed red;
+}
+
+#tit-tabela{
+    font-size:30px;
+    margin-bottom: 30px;
+}
+
+
+
+.container-resultado-resposta-ativo{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color:#994d4df5;
+    width: 30vw;
+    height: 30vh;
+    top: 35vh;
+    left: 35vw;
+}
+
+.container-resultado-resposta-ativo p{
+    color: white;
+}
+
+.fas.fa-times-circle{
+    color:red;
+    font-size: 30px;
+}
+
+.fas.fa-times-circle:hover{
+    cursor: pointer;
+    color: rgb(82, 1, 1);
+}
+
+#wel-ms{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.container-resposta-consultor{
+    width: 100%;
+    height: 100%;
+}
+
+.container-resposta-consultor .form-env{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center
+}
+
+.campo-form{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.campo-form label{
+    color: white;
+}
+
+.campo-form textarea {
+    background-color:#994d4df5;
+    color: white;
+    border: 1px solid whitesmoke;
+    border-radius:10px;
+}
+
+.campo-form #res, #msg-clie{
+    width:80%;
+    height: 50%;
+}
+.container-resultado-resposta-inativo{
+
+}
+
+#subm{
+    margin: 0 auto;
+    width: 60%;
+    height:100%;
+    background-color: red;
+    color: white;
+    border-radius:10px;
+}
+
+.campo-sub{
+    /* margin-top: 4px; */
+    width: 95%;
+    margin: 0 auto;
+    display: flex;
+}
+
+.btn-cont, .btn-cont-ativ{
+    width:100%;
+    height: 50%;
+    border-radius: 10px;
+    padding: 1.3px;
+}
+
+.btn-cont{
+    background-color:red;
+    color: white;
+}
+
+.btn-cont:hover{
+    background-color:rgb(114, 6, 6);
+    cursor: pointer;
+}
+
+.btn-cont-ativ{
+    background-color:greenyellow;
+    color: black;
+}
+
+.btn-cont-ativ:hover{
+    background-color:rgb(84, 124, 24);
+    cursor: pointer;
+}
+
+tr:hover{
+    background-color:rgb(207, 126, 126);
+}

@@ -1,0 +1,64 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+
+body{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+main{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items:center;
+}
+
+.faixa-cards{
+    background-color: white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 90%;
+    height: 75%;
+}
+
+.card-item{
+    height:calc(100vw/3 - 8vw);
+    width:calc(100vw/3 - 8vw);
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items:center;
+    color:red;
+    box-shadow: 2px 2px 2px black;
+}
+
+.card-item a{
+    text-decoration:none;
+    text-align: center;
+    color: red;
+}
+
+.card-item a h2{
+    margin-bottom:20px;
+}
+
+.card-item a i{
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    width: 80%;
+    height: 80%;
+    background-color:whitesmoke;
+    font-size:280px;
+    text-align: center;
+    color: red;
+}
+
+
+/*Rodapé*/

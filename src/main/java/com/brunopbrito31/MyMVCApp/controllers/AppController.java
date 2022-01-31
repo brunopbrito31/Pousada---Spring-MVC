@@ -18,6 +18,7 @@ import com.brunopbrito31.MyMVCApp.models.entities.Form;
 import com.brunopbrito31.MyMVCApp.models.entities.Phone;
 import com.brunopbrito31.MyMVCApp.models.entities.User;
 import com.brunopbrito31.MyMVCApp.models.entities.enums.Gender;
+import com.brunopbrito31.MyMVCApp.models.entities.enums.StatusContact;
 import com.brunopbrito31.MyMVCApp.models.repositories.AdressRepository;
 import com.brunopbrito31.MyMVCApp.models.repositories.ContactRepository;
 import com.brunopbrito31.MyMVCApp.models.repositories.PhoneRepository;
@@ -88,10 +89,16 @@ public class AppController {
                 userResult = searchedUser.get();
     
             }else{
-                Adress adressAux = Adress.builder()
-                .city(form.getCity()).country("Brasil").district(form.getDistrict())
-                .state(form.getState()).street(form.getStreet()).zipCode(form.getZipPostal()).build();
-                adressAux = adressRespository.save(adressAux);
+                Optional<Adress> oldAdress = adressRespository.findByZipCode(form.getZipPostal());
+                Adress adressAux;
+                if(oldAdress.isPresent()){
+                    adressAux = oldAdress.get();
+                }else{
+                    adressAux = Adress.builder()
+                    .city(form.getCity()).country("Brasil").district(form.getDistrict())
+                    .state(form.getState()).street(form.getStreet()).zipCode(form.getZipPostal()).build();
+                    adressAux = adressRespository.save(adressAux);
+                }
                 // Phone Tratament
                 Phone phoneAux = FormConverter.phoneMounterNoContentUser(form);
                 // Date Tratament
@@ -112,7 +119,7 @@ public class AppController {
             }
     
             Contact contact = Contact.builder().msg(form.getMessage())
-            .sendDate(Date.from(Instant.now())).user(userResult).build();
+            .sendDate(Date.from(Instant.now())).user(userResult).status(StatusContact.OPENED).build();
             contact = contactRepository.save(contact);
     
             Calendar cal = Calendar.getInstance();

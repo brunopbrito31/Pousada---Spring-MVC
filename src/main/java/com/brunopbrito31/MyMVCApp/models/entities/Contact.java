@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import com.brunopbrito31.MyMVCApp.models.entities.enums.StatusContact;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,5 +38,8 @@ public class Contact {
 
     @Column(name="mensagem")
     private String msg;
+
+    private StatusContact status;
+    
     
 }
