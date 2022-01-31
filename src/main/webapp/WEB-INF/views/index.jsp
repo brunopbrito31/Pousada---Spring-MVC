@@ -9,7 +9,7 @@
     <%-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> --%>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pousada BrunoPBrito31</title>
-    <link rel="stylesheet" href="/static/estilo.css">
+    <link rel="stylesheet" href="/static/css/estilo.css">
 </head>
 <body>
     <jsp:include page="/WEB-INF/views/includes/inc-top-home.jsp" />
@@ -106,7 +106,7 @@
             <img src="/static/assets/img/quemsomos.jpg" />
         </div>
     </div>
-    <script src="/static/index.js" defer></script>
-    <script src="/static/visual.js" defer></script>
+    <script src="/static/js/index.js" defer></script>
+    <script src="/static/js/visual.js" defer></script>
 </body>
 </html>

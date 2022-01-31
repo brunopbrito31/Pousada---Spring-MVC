@@ -178,3 +178,50 @@ table tbody tr td{
 tr:hover{
     background-color:rgb(207, 126, 126);
 }
+
+tr td{
+    text-align:center;
+}
+
+#tab-cont{
+    min-width:80vw;
+}
+
+.container-paginacao{
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.botoes-paginacao{
+    display: flex;
+    list-style: none;
+}
+
+.botoes-paginacao li{
+    margin: 5px;
+    width: 20px;
+    height: 20px;
+    background-color:red;
+    border-radius:50%;
+    display:flex;
+    justify-content: center;
+    align-items:center;
+}
+
+.botoes-paginacao li a{
+    text-decoration: none;
+    color:white;
+}
+
+#actual{
+    background-color:rgb(68, 5, 5);
+}
+
+input::placeholder{
+    color: white;
+}
+
+textarea::placeholder{
+    color: white;
+}

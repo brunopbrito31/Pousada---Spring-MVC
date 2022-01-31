@@ -40,9 +40,21 @@ public interface ContactRepository extends JpaRepository<Contact, Long>{
         +"inner join tb_usuarios on tb_contatos.usuario_id = tb_usuarios.id "
         +"inner join tb_enderecos on tb_usuarios.endereco_id = tb_enderecos.id "
         +"inner join tb_telefones on tb_telefones.usuario_id  = tb_usuarios.id "
-        +"where tb_contatos.status != 2 order by data_envio ",
+        +"where tb_contatos.status != 2 order by data_envio, status LIMIT ?1, ?2 ",
         nativeQuery = true
     )
-    List<Contact> findAllActiveContacts();
+    List<Contact> findAllActiveContacts(Integer startLimit, Integer pageSize);
     
+
+    @Query(
+        value = 
+        "SELECT count(tb_contatos.id) "
+        +"from tb_contatos "
+        +"inner join tb_usuarios on tb_contatos.usuario_id = tb_usuarios.id "
+        +"inner join tb_enderecos on tb_usuarios.endereco_id = tb_enderecos.id "
+        +"inner join tb_telefones on tb_telefones.usuario_id  = tb_usuarios.id "
+        +"where tb_contatos.status != 2 ",
+        nativeQuery = true
+    )
+    Long persCount ();
 }
