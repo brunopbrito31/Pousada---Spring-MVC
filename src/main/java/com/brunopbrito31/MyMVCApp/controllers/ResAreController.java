@@ -3,7 +3,6 @@ package com.brunopbrito31.MyMVCApp.controllers;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,9 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.brunopbrito31.MyMVCApp.models.entities.Contact;
 import com.brunopbrito31.MyMVCApp.models.repositories.CardMenResAreRepository;
 import com.brunopbrito31.MyMVCApp.models.repositories.ContactRepository;
+import com.brunopbrito31.MyMVCApp.models.repositories.InitialPageRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +29,9 @@ public class ResAreController {
 
     @Autowired
     private ContactRepository contactRepository;
+
+    @Autowired
+    private InitialPageRepository initialPageRepository;
 
     @GetMapping("/dashboard")
     public ModelAndView getDash(
@@ -57,10 +59,20 @@ public class ResAreController {
         if(request.getSession().getAttribute("user") == null){
             response.sendRedirect("/users/login");
         }
-
+        Integer aut;
+        if(request.getSession().getAttribute("aut") == null){
+            aut = 0;
+        }else{
+            aut = Integer.parseInt(request.getSession().getAttribute("aut").toString());
+        }
         Integer startLimit = pageNo * pageSize;
-        Integer endLimit = startLimit + pageSize;
-        Long totalItems = contactRepository.persCount();
+        Long totalItems = 0l;
+
+        if( aut == 0){
+            totalItems = contactRepository.persOpenCount(); 
+        }else if( aut == 1){
+            totalItems = contactRepository.persCount(); 
+        }
 
         Double qtPagesAux = (double) totalItems / pageSize;
         Integer qtPages;
@@ -70,7 +82,13 @@ public class ResAreController {
             qtPages = qtPagesAux.intValue();
         }
 
-        List<Contact> contacts = contactRepository.findAllActiveContacts(startLimit,pageSize);
+        List<Contact> contacts = null; 
+        if( aut == 0 ){
+            contacts = contactRepository.findAllActiveOpenContacts(startLimit,pageSize);
+        }else if( aut == 1 ){
+            contacts = contactRepository.findAllActiveContacts(startLimit,pageSize);
+        }
+        
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
         model.addAttribute("dateFormater", sdf);
@@ -79,6 +97,41 @@ public class ResAreController {
         model.addAttribute("pageNo",pageNo);
         model.addAttribute("qtPages",qtPages);
         return new ModelAndView("/area-restrita/list-contacts");
+    }
+
+    @GetMapping("/users")
+    public ModelAndView getUsers(
+        Model model,
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws IOException{
+        if(request.getSession().getAttribute("user") == null){
+            response.sendRedirect("/users/login");
+        }
+        return new ModelAndView("/area-restrita/list-users");
+    }
+
+    @GetMapping("/configurations")
+    public ModelAndView getAdm(
+        Model model,
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws IOException{
+        if(request.getSession().getAttribute("user") == null){
+            response.sendRedirect("/users/login");
+        }
+        model.addAttribute("config",initialPageRepository.findById(1l).get());
+        return new ModelAndView("/area-restrita/adm");
+    }
+
+    @GetMapping("/logoff")
+    public void getLogoff(
+        Model model,
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws IOException{
+        request.getSession().invalidate();
+        response.sendRedirect("/users/login");
     }
     
 }

@@ -1,16 +1,16 @@
 
 async function apagar(num){
-    console.log("Função de Apagar, Id Recebido: ");
-    console.log(num);
-    let response = await fetch(`http://localhost:8080/contacts/${num}`,{method:'DELETE'});
-    let status = response.status;
-    let contactInHtml = document.querySelector(`#contact-${num}`);
-    
-    if(status === 204){
-        document.getElementsByTagName('tbody')[0].removeChild(contactInHtml);
-    }else{
-        alert("houve um erro na exclusão");
-    }   
+    if(confirm("Deseja prosseguir com a exclusão?")){
+        let response = await fetch(`http://localhost:8080/contacts/${num}`,{method:'DELETE'});
+        let status = response.status;
+        let contactInHtml = document.querySelector(`#contact-${num}`);
+        
+        if(status === 204){
+            document.getElementsByTagName('tbody')[0].removeChild(contactInHtml);
+        }else{
+            alert("houve um erro na exclusão");
+        }   
+    }
 }
 
 async function responder(num){
@@ -89,8 +89,3 @@ function fecharModal(){
     let modalAux = document.querySelector('.container-resultado-resposta-ativo');
     containerPai.removeChild(modalAux);
 }
-
-window.addEventListener('load',()=>{
-    let aut = document.querySelector('#aut');
-    sessionStorage.setItem('aut',aut.value);
-});

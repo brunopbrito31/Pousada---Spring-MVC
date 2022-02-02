@@ -1,10 +1,11 @@
 package com.brunopbrito31.MyMVCApp.models.entities;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,22 +16,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name="tb_cards_menu_area_restrita")
-public class CardMenResAre {
+@Entity(name="tb_produto_dest")
+public class ProductDest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "classe_icone")
-    private String classIcon;
+    @OneToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
-    @Column(name="nome")
-    private String name;
 
-    private String link;
 
-    @Column(name="nivel_autorizacao")
-    private Long autorization;
-    
 }

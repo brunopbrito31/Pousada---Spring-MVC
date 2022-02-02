@@ -1,7 +1,7 @@
 <section class="area-apres">
     <section class="top-desc">
-        <h1>Pousada Secreta</h1>
-        <p>Paz e muita diversão no mesmo lugar</p>
+        <h1>${config.titleTop}</h1>
+        <p>${config.msgTop}</p>
     </section>
-    <img src="/static/assets/img/top.jpg">
+    <img src="${config.imgTopUrlName}">
 </section>

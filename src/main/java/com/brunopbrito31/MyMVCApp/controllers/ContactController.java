@@ -68,7 +68,7 @@ public class ContactController {
 
         try{
             MailGenerator.sendMail(
-                "Olá "+confirmedContact.getUser().getName()+", "+msg, 
+                "Olá "+confirmedContact.getUser().getName()+",Temos uma resposta para você. "+msg, 
                 "Pousada Secreta: Retorno do Contato realizado no dia: "+sdf.format(confirmedContact.getSendDate()), 
                 "brunopbrito31@gmail.com", 
                 System.getenv("Mailer_Password"), 

@@ -1,10 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
-<% 
-    Integer qtPages =  Integer.parseInt( request.getAttribute("qtPages").toString() );
-    Integer actualPage = Integer.parseInt( request.getAttribute("pageNo").toString() );
-%>
 
 <!DOCTYPE html>
 <html>
@@ -61,19 +57,19 @@
 
             <div class="container-paginacao">
                 <ul class="botoes-paginacao">
-                    <%
-                        for(int i = 1; i <= qtPages; i++){
-                            if((i-1) == actualPage){
-                                out.print("<li id='actual'><a href='/restrict-area/contacts?pageNo="+(i-1)+"'>"+i+"</a></li>");
-                            }else{
-                                out.print("<li><a href='/restrict-area/contacts?pageNo="+(i-1)+"'>"+i+"</a></li>");
-                            }
-                        }
-                    %>
+                    <c:forEach var="i" begin="${1}" end="${qtPages}">
+                        <c:choose>  
+                            <c:when test="${i-1 == pageNo}">  
+                                <li id="actual"><a href="/restrict-area/contacts?pageNo=${i-1}">${i}</a></li></li>
+                            </c:when> 
+                            <c:otherwise>
+                                <li><a href="/restrict-area/contacts?pageNo=${i-1}">${i}</a></li></li>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
                 </ul>
             </div>
         </main>
-        <input type="hidden" id="aut" value="${aut}">
 
         <jsp:include page="/WEB-INF/views/includes/inc-bot-are-res.jsp" />
         <script defer src="/static/js/contact.js"></script>

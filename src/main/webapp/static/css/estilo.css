@@ -128,35 +128,47 @@ header nav ul{
 
 .form-contato{
     background-color:rgba(128, 0, 128, 0.158);
-    width: 75%;
+    width: 92%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     text-align: center;
     justify-content: center;
     align-items: center;
-    color: rgba(255, 255, 255, 0.596);
+    color: rgba(255, 255, 255, 0.700);
     margin-top: 50px;
     padding: 25px 0 25px 0;
+    border-radius: 10px ;
 }
 
-.form-contato .campo-form input, textarea{
+.form-contato .campo-form{
     width: 100%;
+}
+
+.form-contato .campo-form input, textarea, #sex-inp {
+    width: 75%;
     margin: 2px auto;
     background-color:rgba(128, 0, 128, 0.158);
     color: white;
     font-size: 18px;
     text-align: center;
-    border: 1px solid transparent;
+    border: 1px solid rgba(128, 0, 128, 0.700);
+    border-radius:10px;
 }
 
-
-.campo-submit input{
-    background-color:rgba(128, 0, 128, 0.158);
-    width: 150px;
+#bt-submit{
+    background-color:rgba(128, 0, 128, 0.455);
+    margin-top:15px;
+    width: 65%;
     color: white;
     border-radius: 10px;
-    font-size: 18px;
+    font-size: 25px;
+    border-color: white;
+}
+
+#bt-submit:hover{
+    background-color:rgba(128, 0, 128, 0.800);
+    color: whitesmoke;
 }
 
 .ativo{
@@ -194,12 +206,14 @@ header nav ul{
     flex-grow: 1;
 }
 
-.campo-form input::placeholder{
-    color: white;
-}
-
+.campo-form input::placeholder,
+#dnas-inp::placeholder,
+#sex-inp::placeholder, 
 .campo-form textarea::placeholder{
     color: white;
+    text-align: center;
+    font-size:1em;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 @media screen and (max-width: 1000px) {

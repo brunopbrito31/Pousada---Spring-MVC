@@ -21,6 +21,7 @@ import com.brunopbrito31.MyMVCApp.models.entities.enums.Gender;
 import com.brunopbrito31.MyMVCApp.models.entities.enums.StatusContact;
 import com.brunopbrito31.MyMVCApp.models.repositories.AdressRepository;
 import com.brunopbrito31.MyMVCApp.models.repositories.ContactRepository;
+import com.brunopbrito31.MyMVCApp.models.repositories.InitialPageRepository;
 import com.brunopbrito31.MyMVCApp.models.repositories.PhoneRepository;
 import com.brunopbrito31.MyMVCApp.models.repositories.ProductRepository;
 import com.brunopbrito31.MyMVCApp.models.repositories.UserRepository;
@@ -55,11 +56,15 @@ public class AppController {
     @Autowired
     private ContactRepository contactRepository;
 
+    @Autowired
+    private InitialPageRepository initialPageRepository;
+
     @GetMapping
     public ModelAndView getTest(ModelMap model){
         model.addAttribute("form",new Form());
         model.addAttribute("quartos", productRepository.findAll());
         model.addAttribute("");
+        model.addAttribute("config",initialPageRepository.findById(1l).get());
         return new ModelAndView("index");
     }
     
@@ -138,9 +143,11 @@ public class AppController {
                 ""
             );
             model.addAttribute("form",new Form());
+            model.addAttribute("config",initialPageRepository.findById(1l).get());
            
             return new ModelAndView("form-sucess");
         }
+        model.addAttribute("config",initialPageRepository.findById(1l).get());
         return new ModelAndView("form-fail");
     }
     

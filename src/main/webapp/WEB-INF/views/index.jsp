@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <%-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> --%>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pousada BrunoPBrito31</title>
+    <title>${config.titleTop}</title>
     <link rel="stylesheet" href="/static/css/estilo.css">
 </head>
 <body>
@@ -16,9 +16,9 @@
     <jsp:include page="/WEB-INF/views/includes/inc-top-desta.jsp" />
     <main>
         <section class="area-apres-desc">
-            <h2>SEJA BEM-VINDO(A)!</h2>
-            <p>Os melhores quartos você encontra aqui</p>
-            <p>Confira alguns.</p>
+            <h2>${config.titleProducts}</h2>
+            <p>${config.descriptionProducts}</p>
+            <p>${config.subdescriptionProducts}</p>
         </section>
 
         <section class="area-apres-quar" id="quartos">
@@ -29,7 +29,6 @@
                 </div>
             </c:forEach>
         </section>
-        
     </main>
 
     <div class="area-mapa" id="mapa">
@@ -39,9 +38,9 @@
 
     <div class="container-quem-somos">
         <div id="filtro-imagem">
-            <h1>Uma Proposta Diferente...</h1>
+            <h1>${config.slogan}</h1>
             <p>
-                Um grupo formado com o intuito de proporcionar lazer e descanso as pessoas que ao longo dos dias possuem uma rotina desgastante, cheia de desafios, está querendo descansar com a melhor vista? Fale com a gente!
+                ${config.about}
             </p>
 
 
@@ -60,7 +59,7 @@
                 </p>
 
                 <div class="campo-form">
-                    <form:select path="gender" placeholder="Sexo" >
+                    <form:select path="gender" id="sex-inp" placeholder="Sexo" >
                         <form:option value="0">Masculino</form:option>
                         <form:option value="1">Feminino</form:option>
                     </form:select>
@@ -68,7 +67,7 @@
 
                 <div class="campo-form">
                     <form:label path="birthDate">Data de Nascimento</form:label>
-                    <form:input path="birthDate" type="date" placeholder="Data de Nascimento" />
+                    <form:input path="birthDate" id="dnas-inp" type="date" placeholder="Data de Nascimento" />
                 </div>
 
                 <div class="campo-form">
@@ -103,7 +102,7 @@
             </form:form>
         </div>
         <div class="quem-somos" id="sobre">
-            <img src="/static/assets/img/quemsomos.jpg" />
+            <img src="${config.aboutImgUrlName}" />
         </div>
     </div>
     <script src="/static/js/index.js" defer></script>

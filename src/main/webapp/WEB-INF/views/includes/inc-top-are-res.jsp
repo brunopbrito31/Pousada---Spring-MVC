@@ -37,6 +37,9 @@
             <li>
                 <a href="/">Ir para o Site</a>
             </li>
+            <li>
+                <a href="/restrict-area/logoff">Deslogar</a>
+            </li>
         </ul>
     </nav>
 </header>

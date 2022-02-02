@@ -1,10 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
-<% 
-    Integer qtPages =  Integer.parseInt( request.getAttribute("qtPages").toString() );
-    Integer actualPage = Integer.parseInt( request.getAttribute("pageNo").toString() );
-%>
 
 <!DOCTYPE html>
 <html>
@@ -23,6 +18,11 @@
         <jsp:include page="/WEB-INF/views/includes/inc-top-are-res.jsp" />
         <main>
             Pagina de Usuarios
+            <div class="area-cards">
+                <div class="card-usuario">
+
+                </div>
+            </div>
         </main>
         <jsp:include page="/WEB-INF/views/includes/inc-bot-are-res.jsp" />
         <script defer src="/static/js/users.js"></script>
