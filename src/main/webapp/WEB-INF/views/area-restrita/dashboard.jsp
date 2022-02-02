@@ -46,10 +46,19 @@
             </div>
         </main>
         <jsp:include page="/WEB-INF/views/includes/inc-bot-are-res.jsp" />
-        <script>
+        <script defer>
             window.addEventListener('load',()=>{
                 let aut = "${aut}";
                 sessionStorage.setItem('aut',aut);
+                let cards = document.querySelectorAll('.card-item');
+                console.log(cards);
+                
+                let i = 0;
+                while(i < cards.length){
+                    cards[i].classList.add('effe-start');
+                    console.log(i * 3000);
+                    setTimeout(i++,6000);
+                }
             });
         </script>
     </body>

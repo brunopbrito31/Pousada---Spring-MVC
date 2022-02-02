@@ -52,7 +52,7 @@
                     <legend>Mapa</legend>
                     <div class="campo-form">
                         <label for="localizationMap">Localização/Chave:</label>
-                        <input type="text" id="localizationMap" value="${config.msgTop}">
+                        <input type="text" id="localizationMap" value="${config.localizationMap}">
                     </div>
                     <div class="campo-form">
                         <label for="mapDescription">Descrição:</label>

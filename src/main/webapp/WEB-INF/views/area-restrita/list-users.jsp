@@ -17,11 +17,60 @@
     <body>
         <jsp:include page="/WEB-INF/views/includes/inc-top-are-res.jsp" />
         <main>
-            Pagina de Usuarios
+            
             <div class="area-cards">
-                <div class="card-usuario">
+                <c:forEach items="${users}" var="user">
+                    <div class="card-usuario" id="card-usuario-${user.id}">
 
-                </div>
+                        <div class="form-campo-VALORID" id="icone-${user.id}">
+                            <c:choose>  
+                                <c:when test="${user.autho.ordinal() == 0}">  
+                                    <i class="fas fa-user-tie"></i>
+                                </c:when>
+                                <c:when test="${user.autho.ordinal() == 1}"> 
+                                    <i class="fas fa-user-shield"></i> 
+                                </c:when>  
+                                <c:otherwise>
+                                    <i class="fas fa-user"></i>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+
+                        <div class="form-campo">
+                            <label for="nome-${user.id}">Nome:</label>
+                            <input type="text" id="nome-${user.id}" value="${user.name}" disabled>
+                        </div>
+
+                        <div class="form-campo">
+                            <label for="email-${user.id}">Email:</label>
+                            <input type="text" id="email-${user.id}" value="${user.mail}" disabled>
+                        </div>
+
+                        <div class="form-campo">
+                            <button type="button" class="botao-editar" onclick="editarUsuario('${user.id}')">Editar</button>
+                        </div>
+
+                        <div class="form-campo">
+                            <button type="button" class="botao-desativar" onclick="desativarUsuario('${user.id}')">Desativar</button>
+                        </div>
+                        
+                    </div>
+                </c:forEach>
+
+                <div class="container-paginacao">
+                <ul class="botoes-paginacao">
+                    <c:forEach var="i" begin="${1}" end="${qtPages}">
+                        <c:choose>  
+                            <c:when test="${i-1 == pageNo}">  
+                                <li id="actual"><a href="/restrict-area/users?pageNo=${i-1}">${i}</a></li></li>
+                            </c:when> 
+                            <c:otherwise>
+                                <li><a href="/restrict-area/users?pageNo=${i-1}">${i}</a></li></li>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                </ul>
+            </div>
             </div>
         </main>
         <jsp:include page="/WEB-INF/views/includes/inc-bot-are-res.jsp" />

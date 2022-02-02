@@ -7,10 +7,12 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.brunopbrito31.MyMVCApp.models.auxiliar.Paginator;
 import com.brunopbrito31.MyMVCApp.models.entities.Contact;
 import com.brunopbrito31.MyMVCApp.models.repositories.CardMenResAreRepository;
 import com.brunopbrito31.MyMVCApp.models.repositories.ContactRepository;
 import com.brunopbrito31.MyMVCApp.models.repositories.InitialPageRepository;
+import com.brunopbrito31.MyMVCApp.models.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,9 @@ public class ResAreController {
     @Autowired
     private InitialPageRepository initialPageRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping("/dashboard")
     public ModelAndView getDash(
         HttpServletRequest request, 
@@ -40,9 +45,8 @@ public class ResAreController {
         Model model
     ) throws IOException
     {
-        if(request.getSession().getAttribute("user") == null){
-            response.sendRedirect("/users/login");
-        }
+        isAuthenticated(request,response);
+
         model.addAttribute("cards", cardMenResAreRepository.findAll());
         model.addAttribute("userOn", request.getSession().getAttribute("user"));
         return new ModelAndView("/area-restrita/dashboard");
@@ -56,37 +60,35 @@ public class ResAreController {
         @RequestParam(defaultValue = "0") Integer pageNo,
         @RequestParam(defaultValue = "10") Integer pageSize
     ) throws IOException{  
-        if(request.getSession().getAttribute("user") == null){
-            response.sendRedirect("/users/login");
-        }
-        Integer aut;
-        if(request.getSession().getAttribute("aut") == null){
-            aut = 0;
-        }else{
-            aut = Integer.parseInt(request.getSession().getAttribute("aut").toString());
-        }
-        Integer startLimit = pageNo * pageSize;
-        Long totalItems = 0l;
+        isAuthenticated(request,response);
 
+        Integer aut = isAutSessionEmpty(request);
+        
+        Long totalItems = 0l;
         if( aut == 0){
             totalItems = contactRepository.persOpenCount(); 
         }else if( aut == 1){
             totalItems = contactRepository.persCount(); 
         }
 
-        Double qtPagesAux = (double) totalItems / pageSize;
-        Integer qtPages;
-        if(qtPagesAux != qtPagesAux.intValue()){
-            qtPages = qtPagesAux.intValue() + 1;
-        }else{
-            qtPages = qtPagesAux.intValue();
-        }
+        Paginator paginator = new Paginator(
+            pageNo,
+            pageSize,
+            totalItems
+        );
 
         List<Contact> contacts = null; 
         if( aut == 0 ){
-            contacts = contactRepository.findAllActiveOpenContacts(startLimit,pageSize);
+            contacts = contactRepository.findAllActiveOpenContacts(
+                paginator.getStartLimit(),
+                pageSize
+            );
+
         }else if( aut == 1 ){
-            contacts = contactRepository.findAllActiveContacts(startLimit,pageSize);
+            contacts = contactRepository.findAllActiveContacts(
+                paginator.getStartLimit(),
+                pageSize
+            );
         }
         
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -95,7 +97,7 @@ public class ResAreController {
         model.addAttribute("aut",request.getSession().getAttribute("aut"));
         model.addAttribute("contacts",contacts);
         model.addAttribute("pageNo",pageNo);
-        model.addAttribute("qtPages",qtPages);
+        model.addAttribute("qtPages",paginator.getQtPages());
         return new ModelAndView("/area-restrita/list-contacts");
     }
 
@@ -103,11 +105,21 @@ public class ResAreController {
     public ModelAndView getUsers(
         Model model,
         HttpServletRequest request,
-        HttpServletResponse response
+        HttpServletResponse response,
+        @RequestParam(defaultValue = "0") Integer pageNo,
+        @RequestParam(defaultValue = "10") Integer pageSize
     ) throws IOException{
-        if(request.getSession().getAttribute("user") == null){
-            response.sendRedirect("/users/login");
-        }
+        isAuthenticated(request,response);
+
+        Paginator paginator = new Paginator(
+            pageNo,
+            pageSize,
+            userRepository.count()
+        );
+
+        model.addAttribute("pageNo",pageNo);
+        model.addAttribute("qtPages",paginator.getQtPages());
+        model.addAttribute("users", userRepository.findUsersWithPagination(paginator.getStartLimit(),pageSize));
         return new ModelAndView("/area-restrita/list-users");
     }
 
@@ -117,9 +129,8 @@ public class ResAreController {
         HttpServletRequest request,
         HttpServletResponse response
     ) throws IOException{
-        if(request.getSession().getAttribute("user") == null){
-            response.sendRedirect("/users/login");
-        }
+        isAuthenticated(request,response);
+
         model.addAttribute("config",initialPageRepository.findById(1l).get());
         return new ModelAndView("/area-restrita/adm");
     }
@@ -132,6 +143,20 @@ public class ResAreController {
     ) throws IOException{
         request.getSession().invalidate();
         response.sendRedirect("/users/login");
+    }
+
+    private void isAuthenticated(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        if(request.getSession().getAttribute("user") == null){
+            response.sendRedirect("/users/login");
+        }
+    }
+
+    private Integer isAutSessionEmpty(HttpServletRequest req){
+        if(req.getSession().getAttribute("aut") == null){
+            return 0;
+        }else{
+            return Integer.parseInt(req.getSession().getAttribute("aut").toString());
+        }
     }
     
 }

@@ -33,7 +33,7 @@
 
     <div class="area-mapa" id="mapa">
         <p>Como Chegar?</p>
-        <iframe  id="gmap_canvas" src="https://maps.google.com/maps?q=2880%20Broadway,%20New%20York&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+        <iframe  id="gmap_canvas" src="https://maps.google.com/maps${config.localizationMap}" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
     </div>
 
     <div class="container-quem-somos">

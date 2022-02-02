@@ -17,3 +17,125 @@ main{
     align-items:center;
 }
 
+.area-cards{
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items:center;
+    box-sizing: border-box;
+    width: 80vw;
+    height: 65vh;
+    background-color: whitesmoke;
+}
+
+.area-cards .card-usuario{
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    border-radius: 10px;
+    background-color:whitesmoke;
+    margin: 10px;
+    height: calc(65vh/10 - 5px);
+    width: calc(0.8*80vw);
+    box-shadow: 2px 2px 5px black;
+    transition: 3s;
+    animation-name: efctEx;
+    animation-duration: 3s;
+}
+
+.area-cards .card-usuario:hover{
+    opacity: 0.92;
+    transform: scale(1.04);
+}
+
+.card-usuario .form-campo{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-campo input{
+    background-color:whitesmoke;
+    border: 1px solid white;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.form-campo button{
+    width:80%;
+    height:75%;
+    font-size: 20px;
+    color: white;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.185);
+}
+
+.form-campo .botao-editar{
+    background-color: rgb(6, 177, 6);
+}
+
+.form-campo .botao-desativar{
+    background-color: rgb(175, 12, 12);
+}
+
+.form-campo .botao-editar:hover, 
+.form-campo .botao-desativar:hover{
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.fas.fa-user-tie,
+.fas.fa-user-shield,
+.fas.fa-user{
+    font-size: 30px;
+}
+
+.fas.fa-user-tie{
+    color:blue;
+}
+.fas.fa-user-shield{
+    color: red;
+}
+.fas.fa-user{
+    color: grey;
+}
+
+@keyframes efctEx {
+    0%{opacity: 0;}
+    100%{opacity:1;}
+}
+
+/*Pagination*/
+.container-paginacao{
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.botoes-paginacao{
+    display: flex;
+    list-style: none;
+}
+
+.botoes-paginacao li{
+    margin: 5px;
+    width: 20px;
+    height: 20px;
+    background-color:red;
+    border-radius:50%;
+    display:flex;
+    justify-content: center;
+    align-items:center;
+}
+
+.botoes-paginacao li a{
+    text-decoration: none;
+    color:white;
+}
+
+#actual{
+    background-color:rgb(68, 5, 5);
+}

@@ -60,5 +60,15 @@ main{
     color: red;
 }
 
+.effe-start{
+    animation-name: efctEx;
+    animation-duration: 3s;
+}
+
+
+@keyframes efctEx {
+    0%{opacity: 0;}
+    100%{opacity:1;}
+}
 
 /*Rodapé*/

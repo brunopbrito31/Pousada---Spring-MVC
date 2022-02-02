@@ -28,14 +28,14 @@
 <header class="top-header">
     <nav>
         <p>
-            Usuário Logado: <% out.print(request.getSession().getAttribute("user")); %>
+            Usuario Logado: <% out.print(request.getSession().getAttribute("user")); %>
         </p>
         <ul>
             <li>
-                <a href="/restrict-area/dashboard">Home - DashBoard</a>
+                <a href="/restrict-area/dashboard">DashBoard</a>
             </li>
             <li>
-                <a href="/">Ir para o Site</a>
+                <a href="/">Site</a>
             </li>
             <li>
                 <a href="/restrict-area/logoff">Deslogar</a>
