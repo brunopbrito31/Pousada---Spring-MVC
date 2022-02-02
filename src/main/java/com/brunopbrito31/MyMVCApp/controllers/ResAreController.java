@@ -46,9 +46,11 @@ public class ResAreController {
     ) throws IOException
     {
         isAuthenticated(request,response);
-
-        model.addAttribute("cards", cardMenResAreRepository.findAll());
-        model.addAttribute("userOn", request.getSession().getAttribute("user"));
+        if(request.getSession().getAttribute("user") != null){
+            model.addAttribute("idUsu",request.getSession().getAttribute("user").toString());
+            model.addAttribute("cards", cardMenResAreRepository.findAll());
+            model.addAttribute("userOn", request.getSession().getAttribute("user"));
+        }
         return new ModelAndView("/area-restrita/dashboard");
     }
 
@@ -119,7 +121,13 @@ public class ResAreController {
 
         model.addAttribute("pageNo",pageNo);
         model.addAttribute("qtPages",paginator.getQtPages());
-        model.addAttribute("users", userRepository.findUsersWithPagination(paginator.getStartLimit(),pageSize));
+        model.addAttribute(
+            "users", 
+            userRepository.findUsersWithPagination(
+                paginator.getStartLimit(),
+                pageSize
+            )
+        );
         return new ModelAndView("/area-restrita/list-users");
     }
 
@@ -145,7 +153,10 @@ public class ResAreController {
         response.sendRedirect("/users/login");
     }
 
-    private void isAuthenticated(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    private void isAuthenticated(
+        HttpServletRequest request, 
+        HttpServletResponse response
+    ) throws IOException{
         if(request.getSession().getAttribute("user") == null){
             response.sendRedirect("/users/login");
         }

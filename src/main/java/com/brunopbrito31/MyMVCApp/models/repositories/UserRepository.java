@@ -23,6 +23,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
         +"tb_usuarios.data_nascimento, "
         +"tb_usuarios.senha , "
         +"tb_usuarios.nivel_autorizacao , "
+        +"tb_usuarios.status_usuario, "
         +"tb_usuarios.endereco_id, "
         +"tb_enderecos.cidade, "
         +"tb_enderecos.complemento, "
@@ -40,6 +41,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
         +"on tb_usuarios.endereco_id = tb_enderecos.id "
         +"left join tb_telefones "
         +"on tb_telefones.usuario_id  = tb_usuarios.id "
+        +"WHERE tb_usuarios.status_usuario =1 "
         +"LIMIT ?1, ?2 "
         ,nativeQuery=true
     )

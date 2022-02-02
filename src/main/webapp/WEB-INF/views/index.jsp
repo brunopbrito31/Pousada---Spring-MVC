@@ -12,6 +12,17 @@
     <link rel="stylesheet" href="/static/css/estilo.css">
 </head>
 <body>
+    <div id="lgpd-container">
+        <div class="area-termo">
+            <div class="titulo">
+                ${term.title}
+            </div>
+            <div class="conteudo">
+                ${term.content}
+            </div>
+            <button onclick="aceitarTermos()" id="botao-aceite">Li e Estou de acordo</button>
+        </div>
+    </div>
     <jsp:include page="/WEB-INF/views/includes/inc-top-home.jsp" />
     <jsp:include page="/WEB-INF/views/includes/inc-top-desta.jsp" />
     <main>
@@ -105,6 +116,15 @@
             <img src="${config.aboutImgUrlName}" />
         </div>
     </div>
+    <script defer>
+        window.addEventListener("load",()=>{
+            let termo = document.querySelector('#lgpd-container');
+            console.log("entrou no load do window")
+            if(localStorage.getItem("aceite-termo") == 1){
+                termo.style.display = 'none';
+            }
+        })
+    </script>
     <script src="/static/js/index.js" defer></script>
     <script src="/static/js/visual.js" defer></script>
 </body>

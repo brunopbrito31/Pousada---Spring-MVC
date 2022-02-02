@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.brunopbrito31.MyMVCApp.models.entities.FormUser;
 import com.brunopbrito31.MyMVCApp.models.entities.User;
+import com.brunopbrito31.MyMVCApp.models.entities.enums.StatusUser;
 import com.brunopbrito31.MyMVCApp.models.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -110,5 +113,22 @@ public class UserController {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteUser (@PathVariable Long id){
+        try{
+            Optional<User> searchedUser = userRepository.findById(id);
+            if(!searchedUser.isPresent()){
+                return ResponseEntity.badRequest().build();
+            }
+            
+            User confirmedUser = searchedUser.get();
+            confirmedUser.setStatusUser(StatusUser.INACTIVE);
+            userRepository.save(confirmedUser);
+            return ResponseEntity.noContent().build();
+        }catch(RuntimeException e){
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

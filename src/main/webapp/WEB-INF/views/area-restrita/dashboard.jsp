@@ -3,10 +3,13 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <% 
     Integer aut;
+    String mail;
     if(request.getSession().getAttribute("aut") == null){
         aut = 0;
+        mail ="000";
     }else{
        aut = Integer.parseInt(request.getSession().getAttribute("aut").toString());
+       mail = request.getSession().getAttribute("user").toString();
     }
 %>
 <!DOCTYPE html>
@@ -49,14 +52,16 @@
         <script defer>
             window.addEventListener('load',()=>{
                 let aut = "${aut}";
+                let user = "${idUsu}";
+                
                 sessionStorage.setItem('aut',aut);
+                sessionStorage.setItem('user',user);
                 let cards = document.querySelectorAll('.card-item');
                 console.log(cards);
                 
                 let i = 0;
                 while(i < cards.length){
                     cards[i].classList.add('effe-start');
-                    console.log(i * 3000);
                     setTimeout(i++,6000);
                 }
             });

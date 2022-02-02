@@ -24,6 +24,7 @@ import com.brunopbrito31.MyMVCApp.models.repositories.ContactRepository;
 import com.brunopbrito31.MyMVCApp.models.repositories.InitialPageRepository;
 import com.brunopbrito31.MyMVCApp.models.repositories.PhoneRepository;
 import com.brunopbrito31.MyMVCApp.models.repositories.ProductRepository;
+import com.brunopbrito31.MyMVCApp.models.repositories.UseTermRepository;
 import com.brunopbrito31.MyMVCApp.models.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,12 +60,16 @@ public class AppController {
     @Autowired
     private InitialPageRepository initialPageRepository;
 
+    @Autowired
+    private UseTermRepository useTermRepository;
+
     @GetMapping
     public ModelAndView getTest(ModelMap model){
         model.addAttribute("form",new Form());
         model.addAttribute("quartos", productRepository.findAll());
         model.addAttribute("");
-        model.addAttribute("config",initialPageRepository.findById(1l).get());
+        model.addAttribute("config", initialPageRepository.findById(1l).get());
+        model.addAttribute("term", useTermRepository.findById(1l).get());
         return new ModelAndView("index");
     }
     

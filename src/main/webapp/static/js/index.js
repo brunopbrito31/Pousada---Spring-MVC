@@ -80,3 +80,10 @@ frCadr.addEventListener('submit',(evt)=>{
     }
 })
 
+function aceitarTermos(){
+    let termo = document.querySelector('#lgpd-container');
+    localStorage.setItem('aceite-termo',1);
+    localStorage.setItem('aceite-data',new Date());
+    termo.style.display = 'none';
+}
+

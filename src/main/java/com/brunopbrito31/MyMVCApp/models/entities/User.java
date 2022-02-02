@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 
 import com.brunopbrito31.MyMVCApp.models.entities.enums.Authorization;
 import com.brunopbrito31.MyMVCApp.models.entities.enums.Gender;
+import com.brunopbrito31.MyMVCApp.models.entities.enums.StatusUser;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,6 +52,9 @@ public class User {
 
     @Column(name= "nivel_autorizacao")
     private Authorization autho;
+
+    @Column(name= "status_usuario")
+    private StatusUser statusUser;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Phone> Phones;
