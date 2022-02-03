@@ -41,7 +41,6 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/")
 public class AppController {
 
-
     @Autowired
     private ProductRepository productRepository;
 
@@ -64,30 +63,30 @@ public class AppController {
     private UseTermRepository useTermRepository;
 
     @GetMapping
-    public ModelAndView getTest(ModelMap model){
+    public ModelAndView loadInitialPage(ModelMap model){
         model.addAttribute("form",new Form());
         model.addAttribute("quartos", productRepository.findAll());
-        model.addAttribute("");
         model.addAttribute("config", initialPageRepository.findById(1l).get());
         model.addAttribute("term", useTermRepository.findById(1l).get());
         return new ModelAndView("index");
     }
-    
 
     @PostMapping
-    public ModelAndView goSave(
+    public ModelAndView processForm(
         @ModelAttribute("form") Form form,
         Model model,
         HttpServletRequest request
     ) throws ParseException, IOException{
 
-        // Protection for excessive submits
+        // Protection for excessive submits, determines 1 minute for send more form
         Date opdate = (Date)request.getSession().getAttribute("DataProxRes");
 
+        // First Send
         if(opdate == null){
             request.getSession().setAttribute("DataProxRes",Date.from(Instant.now()));
             opdate = (Date)request.getSession().getAttribute("DataProxRes");
         }
+
         Long now = Date.from(Instant.now()).getTime();
         Long proRes = opdate.getTime(); 
 
@@ -95,14 +94,19 @@ public class AppController {
             User userResult;
             Optional<User> searchedUser = userRepository.findByMail(form.getMail());
     
+            // Verify user exists
             if(searchedUser.isPresent()){
                 userResult = searchedUser.get();
     
             }else{
+                // User creation
+
+                // Adress Tratament
                 Optional<Adress> oldAdress = adressRespository.findByZipCode(form.getZipPostal());
                 Adress adressAux;
                 if(oldAdress.isPresent()){
                     adressAux = oldAdress.get();
+
                 }else{
                     adressAux = Adress.builder()
                     .city(form.getCity()).country("Brasil").district(form.getDistrict())
@@ -128,6 +132,7 @@ public class AppController {
                 userResult.getPhones().add(phoneAux);
             }
     
+            // Creation of Contact
             Contact contact = Contact.builder().msg(form.getMessage())
             .sendDate(Date.from(Instant.now())).user(userResult).status(StatusContact.OPENED).build();
             contact = contactRepository.save(contact);
@@ -137,7 +142,8 @@ public class AppController {
             cal.add(Calendar.MINUTE,1);
     
             request.getSession().setAttribute("DataProxRes", cal.getTime());
-    
+
+            // Send mail
             MailGenerator.sendMail(
                 "Olá "+userResult.getName()+" recebemos a sua mensagem e em até 2 dias úteis um de nossos consultores irá realizar contato contigo.", 
                 "Pousada Secreta: Mensagem Recebida Com Sucesso!", 
@@ -147,7 +153,7 @@ public class AppController {
                 "", 
                 ""
             );
-            model.addAttribute("form",new Form());
+
             model.addAttribute("config",initialPageRepository.findById(1l).get());
            
             return new ModelAndView("form-sucess");

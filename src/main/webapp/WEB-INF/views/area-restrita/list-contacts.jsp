@@ -18,10 +18,12 @@
     <body>
         <jsp:include page="/WEB-INF/views/includes/inc-top-are-res.jsp" />
         <main>
-            <div class="area-filtro">
-                <input type="text" placeholder="Buscar pelo Email">
-                <button type="button"><i class="fas fa-search"></i></button>
-            </div>
+            <form method="get"> 
+                <div class="area-filtro">
+                    <input type="text" placeholder="Buscar pelo Email" name="content">
+                    <button ><i class="fas fa-search"></i></button>
+                </div>
+            </form>
             <div class="area-lista-contatos" id="div-pai-tabela">
                 <table id="tab-cont">
                     <caption id="tit-tabela">Contatos</caption>

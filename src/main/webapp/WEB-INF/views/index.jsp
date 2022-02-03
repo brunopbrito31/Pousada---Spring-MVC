@@ -10,9 +10,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${config.titleTop}</title>
     <link rel="stylesheet" href="/static/css/estilo.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
 </head>
 <body>
-    <div id="lgpd-container">
+    <div id="lgpd-container" style="display:none">
         <div class="area-termo">
             <div class="titulo">
                 ${term.title}
@@ -26,6 +27,28 @@
     <jsp:include page="/WEB-INF/views/includes/inc-top-home.jsp" />
     <jsp:include page="/WEB-INF/views/includes/inc-top-desta.jsp" />
     <main>
+        <div class="check-in-pes">
+            <h2>Pesquise suas Férias</h2>
+            <div class="container-campo-pes">
+                <input type="text" id="check-in" placeholder="CHECK IN" onfocus="(this.type='date')">
+                <i class="fas fa-calendar" id="cal-icon"></i>
+            </div>
+            <div class="container-campo-pes">
+                <input type="text" id="check-out" placeholder="CHECK OUT" onfocus="(this.type='date')">
+                <i class="fas fa-calendar" id="cal-icon-2"></i>
+            </div>
+            <div class="container-campo-pes">
+                <select id="hospedes"  placeholder="HÓSPEDES">
+                    <option value="1">1 Pessoa</option>
+                    <option value="2">2 Pessoas</option>
+                    <option value="3">3 Pessoas</option>
+                    <option value="4">4 Pessoas ou Mais</option>
+                </select>
+            </div>
+            <div class="area-botao">
+                <div id="botao-busca"><i class="fas fa-search"></i></div>
+            </div>
+        </div>
         <section class="area-apres-desc">
             <h2>${config.titleProducts}</h2>
             <p>${config.descriptionProducts}</p>
@@ -120,8 +143,8 @@
         window.addEventListener("load",()=>{
             let termo = document.querySelector('#lgpd-container');
             console.log("entrou no load do window")
-            if(localStorage.getItem("aceite-termo") == 1){
-                termo.style.display = 'none';
+            if(localStorage.getItem("aceite-termo") != 1){
+                termo.style.display = 'flex';
             }
         })
     </script>

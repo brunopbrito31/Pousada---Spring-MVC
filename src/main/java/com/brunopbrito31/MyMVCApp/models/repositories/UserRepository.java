@@ -46,5 +46,18 @@ public interface UserRepository extends JpaRepository<User, Long>{
         ,nativeQuery=true
     )
     List<User> findUsersWithPagination(Integer startLimit, Integer pageSize);
+
+    @Query(
+        value=
+        "select COUNT(tb_usuarios.id) "
+        +"from tb_usuarios "
+        +"left join tb_enderecos "
+        +"on tb_usuarios.endereco_id = tb_enderecos.id "
+        +"left join tb_telefones "
+        +"on tb_telefones.usuario_id  = tb_usuarios.id "
+        +"WHERE tb_usuarios.status_usuario =1 "
+        ,nativeQuery=true
+    )
+    Long countActiveUsers();
     
 }

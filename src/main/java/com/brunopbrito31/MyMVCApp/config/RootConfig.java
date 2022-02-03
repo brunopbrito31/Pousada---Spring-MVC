@@ -1,13 +1,15 @@
 // package com.brunopbrito31.MyMVCApp.config;
 
-// import org.springframework.context.annotation.ComponentScan;
+// import org.springframework.context.annotation.Bean;
 // import org.springframework.context.annotation.Configuration;
-// import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+// import org.springframework.web.client.RestTemplate;
 
 // @Configuration
-// @ComponentScan("com.brunopbrito31.MyMVCApp")
-// @EnableWebMvc
 // public class RootConfig {
     
+//     @Bean
+//     public RestTemplate restTemplate() {
+//         return new RestTemplate();
+//     }
     
 // }

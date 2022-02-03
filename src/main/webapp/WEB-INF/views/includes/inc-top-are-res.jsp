@@ -7,6 +7,9 @@
     .top-header nav p{
         font-size: 25px;
         color: white;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
     }
 
     .top-header nav ul{
@@ -21,6 +24,9 @@
         text-decoration: none;
         color: white;
         font-size: 17px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 </style>
 
@@ -28,17 +34,17 @@
 <header class="top-header">
     <nav>
         <p>
-            Usuario Logado: <% out.print(request.getSession().getAttribute("user")); %>
+            <i class="fas fa-portrait"></i><% out.print(request.getSession().getAttribute("user")); %>
         </p>
         <ul>
             <li>
-                <a href="/restrict-area/dashboard">DashBoard</a>
+                <a href="/restrict-area/dashboard"><i class="fas fa-home"></i>DashBoard</a>
             </li>
             <li>
-                <a href="/">Site</a>
+                <a href="/"><i class="fas fa-globe"></i> Site</a>
             </li>
             <li>
-                <a href="/restrict-area/logoff">Deslogar</a>
+                <a href="/restrict-area/logoff"><i class="fas fa-sign-out-alt"></i>Deslogar</a>
             </li>
         </ul>
     </nav>

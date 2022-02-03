@@ -60,17 +60,31 @@ public class ResAreController {
         HttpServletRequest request, 
         HttpServletResponse response,
         @RequestParam(defaultValue = "0") Integer pageNo,
-        @RequestParam(defaultValue = "10") Integer pageSize
+        @RequestParam(defaultValue = "10") Integer pageSize,
+        @RequestParam(defaultValue="00") String content
     ) throws IOException{  
         isAuthenticated(request,response);
+
+        System.out.println("valor de content"+content);
 
         Integer aut = isAutSessionEmpty(request);
         
         Long totalItems = 0l;
         if( aut == 0){
-            totalItems = contactRepository.persOpenCount(); 
+            if(content.equals("00")){
+                totalItems = contactRepository.persOpenCount(); 
+
+            }else{
+                totalItems = contactRepository.findAllActiveOpenContactsWithFilterByNameOrMailCount(content);
+                System.out.println("total de itens= "+totalItems);
+            }
         }else if( aut == 1){
-            totalItems = contactRepository.persCount(); 
+            if(content.equals("00")){
+                totalItems = contactRepository.persCount(); 
+            }else{
+                totalItems = contactRepository.findAllActiveContactsWithFilterNameOrMailCount(content);
+                System.out.println("total de itens= "+totalItems);
+            }
         }
 
         Paginator paginator = new Paginator(
@@ -81,16 +95,36 @@ public class ResAreController {
 
         List<Contact> contacts = null; 
         if( aut == 0 ){
-            contacts = contactRepository.findAllActiveOpenContacts(
-                paginator.getStartLimit(),
-                pageSize
-            );
+            if(content.equals("00")){
+                contacts = contactRepository
+                .findAllActiveOpenContacts(
+                    paginator.getStartLimit(),
+                    pageSize
+                );
+            }else{
+                contacts = contactRepository
+                .findAllActiveOpenContactsWithFilterByNameOrMail(
+                    paginator.getStartLimit(),
+                    pageSize,
+                    content
+                );
+            }
 
         }else if( aut == 1 ){
-            contacts = contactRepository.findAllActiveContacts(
-                paginator.getStartLimit(),
-                pageSize
-            );
+            if(content.equals("00")){
+                contacts = contactRepository
+                .findAllActiveContacts(
+                    paginator.getStartLimit(),
+                    pageSize
+                );
+            }else{
+                contacts = contactRepository
+                .findAllActiveContactsWithFilterNameOrMail(
+                    paginator.getStartLimit(),
+                    pageSize,
+                    content
+                );
+            }
         }
         
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -116,7 +150,7 @@ public class ResAreController {
         Paginator paginator = new Paginator(
             pageNo,
             pageSize,
-            userRepository.count()
+            userRepository.countActiveUsers()
         );
 
         model.addAttribute("pageNo",pageNo);
@@ -141,6 +175,11 @@ public class ResAreController {
 
         model.addAttribute("config",initialPageRepository.findById(1l).get());
         return new ModelAndView("/area-restrita/adm");
+    }
+
+    @GetMapping("/images-add")
+    public ModelAndView addImag(){
+        return new ModelAndView("/area-restrita/galery-image-new");
     }
 
     @GetMapping("/logoff")

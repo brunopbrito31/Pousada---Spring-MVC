@@ -39,8 +39,6 @@ public class ContactController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Contact> deleteContact(@PathVariable Long id){
 
-        System.out.println("id passado pro back= "+id);
-       
         Optional<Contact> searchedContact = contactRepository.findById(id);
         if(!searchedContact.isPresent()){
             return ResponseEntity.notFound().build();
@@ -53,7 +51,7 @@ public class ContactController {
     }
 
     @PostMapping("/response")
-    public ResponseEntity sendResponse(
+    public ResponseEntity sendResponseMail(
         @RequestParam("idcontact") Long idContact, 
         @RequestBody String msg
     ){
