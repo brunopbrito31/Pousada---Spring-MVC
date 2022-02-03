@@ -75,22 +75,10 @@ public interface ContactRepository extends JpaRepository<Contact, Long>{
         +"left join tb_usuarios on tb_contatos.usuario_id = tb_usuarios.id "
         +"left join tb_enderecos on tb_usuarios.endereco_id = tb_enderecos.id "
         +"left join tb_telefones on tb_telefones.usuario_id  = tb_usuarios.id "
-        +"where tb_contatos.status != 2 and tb_usuarios.nome LIKE '%:filter%' order by data_envio, status LIMIT :start, :size ",
+        +"where tb_contatos.status != 2 and tb_usuarios.nome LIKE %:filter% or tb_usuarios.email LIKE %:filter% order by data_envio, status LIMIT :start, :size ",
         nativeQuery = true
     )
     List<Contact> findAllActiveContactsWithFilterNameOrMail(@Param("start")Integer startLimit, @Param("size")Integer pageSize, @Param("filter")String content);
-
-    @Query(
-        value = 
-        "SELECT COUNT(tb_contatos.id) "
-        +"from tb_contatos "
-        +"left join tb_usuarios on tb_contatos.usuario_id = tb_usuarios.id "
-        +"left join tb_enderecos on tb_usuarios.endereco_id = tb_enderecos.id "
-        +"left join tb_telefones on tb_telefones.usuario_id  = tb_usuarios.id "
-        +"where tb_contatos.status != 2 and tb_usuarios.nome LIKE '%:filter%' ",
-        nativeQuery = true
-    )
-    Long findAllActiveContactsWithFilterNameOrMailCount(@Param("filter") String content);
 
     @Query(
         value = 
@@ -155,7 +143,7 @@ public interface ContactRepository extends JpaRepository<Contact, Long>{
         +"left join tb_usuarios on tb_contatos.usuario_id = tb_usuarios.id "
         +"left join tb_enderecos on tb_usuarios.endereco_id = tb_enderecos.id "
         +"left join tb_telefones on tb_telefones.usuario_id  = tb_usuarios.id "
-        +"where tb_contatos.status = 0 and tb_usuarios.nome LIKE '%:filter%' order by data_envio, status LIMIT :start, :size ",
+        +"where tb_contatos.status = 0 and tb_usuarios.nome LIKE %:filter% or tb_usuarios.email LIKE %:filter% order by data_envio, status LIMIT :start, :size ",
         nativeQuery = true
     )
     List<Contact> findAllActiveOpenContactsWithFilterByNameOrMail(@Param("start")Integer startLimit, @Param("size")Integer pageSize, @Param("filter") String filter);
@@ -167,7 +155,7 @@ public interface ContactRepository extends JpaRepository<Contact, Long>{
         +"left join tb_usuarios on tb_contatos.usuario_id = tb_usuarios.id "
         +"left join tb_enderecos on tb_usuarios.endereco_id = tb_enderecos.id "
         +"left join tb_telefones on tb_telefones.usuario_id  = tb_usuarios.id "
-        +"where tb_contatos.status = 0 and tb_usuarios.nome LIKE '%:filter%' ) ",
+        +"where tb_contatos.status = 0 and tb_usuarios.nome LIKE %:filter% or tb_usuarios.email LIKE %:filter% ) ",
         nativeQuery = true
     )
     Long findAllActiveOpenContactsWithFilterByNameOrMailCount(@Param("filter") String filter);
@@ -197,5 +185,17 @@ public interface ContactRepository extends JpaRepository<Contact, Long>{
         nativeQuery = true
     )
     Long persOpenCount ();
+
+    @Query(
+        value = 
+        "SELECT COUNT(tb_contatos.id) "
+        +"from tb_contatos "
+        +"left join tb_usuarios on tb_contatos.usuario_id = tb_usuarios.id "
+        +"left join tb_enderecos on tb_usuarios.endereco_id = tb_enderecos.id "
+        +"left join tb_telefones on tb_telefones.usuario_id  = tb_usuarios.id "
+        +"where tb_contatos.status != 2 and tb_usuarios.nome LIKE %:filter% or tb_usuarios.email LIKE %:filter% ",
+        nativeQuery = true
+    )
+    Long findAllActiveContactsWithFilterNameOrMailCount(@Param("filter") String content);
     
 }
