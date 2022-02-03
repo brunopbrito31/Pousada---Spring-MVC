@@ -83,6 +83,15 @@
                     body: formData
                 }
                 let response = await fetch('http://localhost:8080/images',config);
+                let status = response.status;
+
+                if(status === 201){
+                    let modalImag = document.querySelector('.container-imagem');
+                    modalImag.style.backgroundColor = green;
+                    alert('Imagem enviada com sucesso!');
+                }else{
+                    alert('Houve uma falha no envio, tente novamente mais tarde!');
+                }
 
                 console.log(response);
             })
