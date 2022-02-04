@@ -61,7 +61,7 @@ public class ResAreController {
         HttpServletResponse response,
         @RequestParam(defaultValue = "0") Integer pageNo,
         @RequestParam(defaultValue = "10") Integer pageSize,
-        @RequestParam(defaultValue="00") String content
+        @RequestParam(defaultValue="") String content
     ) throws IOException{  
         isAuthenticated(request,response);
 
@@ -71,7 +71,7 @@ public class ResAreController {
         
         Long totalItems = 0l;
         if( aut == 0){
-            if(content.equals("00")){
+            if(content.equals("")){
                 totalItems = contactRepository.persOpenCount(); 
 
             }else{
@@ -79,7 +79,7 @@ public class ResAreController {
                 System.out.println("total de itens= "+totalItems);
             }
         }else if( aut == 1){
-            if(content.equals("00")){
+            if(content.equals("")){
                 totalItems = contactRepository.persCount(); 
             }else{
                 totalItems = contactRepository.findAllActiveContactsWithFilterNameOrMailCount(content);
@@ -95,7 +95,7 @@ public class ResAreController {
 
         List<Contact> contacts = null; 
         if( aut == 0 ){
-            if(content.equals("00")){
+            if(content.equals("")){
                 contacts = contactRepository
                 .findAllActiveOpenContacts(
                     paginator.getStartLimit(),
@@ -111,7 +111,7 @@ public class ResAreController {
             }
 
         }else if( aut == 1 ){
-            if(content.equals("00")){
+            if(content.equals("")){
                 contacts = contactRepository
                 .findAllActiveContacts(
                     paginator.getStartLimit(),
@@ -129,6 +129,7 @@ public class ResAreController {
         
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
+        model.addAttribute("content",content);
         model.addAttribute("dateFormater", sdf);
         model.addAttribute("aut",request.getSession().getAttribute("aut"));
         model.addAttribute("contacts",contacts);
@@ -178,7 +179,12 @@ public class ResAreController {
     }
 
     @GetMapping("/images-add")
-    public ModelAndView addImag(){
+    public ModelAndView addImag(
+        Model model,
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws IOException{
+        isAuthenticated(request, response);
         return new ModelAndView("/area-restrita/galery-image-new");
     }
 

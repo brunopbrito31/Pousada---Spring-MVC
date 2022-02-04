@@ -57,20 +57,14 @@
                     </div>
                 </c:forEach>
 
-                <div class="container-paginacao">
-                <ul class="botoes-paginacao">
-                    <c:forEach var="i" begin="${1}" end="${qtPages}">
-                        <c:choose>  
-                            <c:when test="${i-1 == pageNo}">  
-                                <li id="actual"><a href="/restrict-area/users?pageNo=${i-1}">${i}</a></li></li>
-                            </c:when> 
-                            <c:otherwise>
-                                <li><a href="/restrict-area/users?pageNo=${i-1}">${i}</a></li></li>
-                            </c:otherwise>
-                        </c:choose>
-                    </c:forEach>
-                </ul>
-            </div>
+                <%-- Paginação --%>
+                <jsp:include page="/WEB-INF/views/includes/inc-bot-pagination.jsp">
+                    <jsp:param name="pageNo" value="${pageNo}" />
+                    <jsp:param name="content" value="${content}" />
+                    <jsp:param name="qtPages" value="${qtPages}" />
+                    <jsp:param name="colorSelected" value="rgb(68, 5, 5)" />
+                    <jsp:param name="borderRadius" value="50%" />
+                </jsp:include>
             </div>
         </main>
         <jsp:include page="/WEB-INF/views/includes/inc-bot-are-res.jsp" />

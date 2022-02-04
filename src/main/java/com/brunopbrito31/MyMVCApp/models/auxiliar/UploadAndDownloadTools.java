@@ -19,8 +19,6 @@ public class UploadAndDownloadTools {
         String nameFile
     ) throws IOException{
 
-        System.out.println(relativePath);
-
         // Captures extension of file
         String[] vectTemp = file.getOriginalFilename().split("[.]");
         String extensionFile = vectTemp[1];

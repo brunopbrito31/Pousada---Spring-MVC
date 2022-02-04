@@ -34,9 +34,28 @@
             </form>
             <button id="bt-env" type="button">Enviar</button>
         </main>
+        <jsp:include page="/WEB-INF/views/includes/inc-bot-are-res.jsp" />
 
         <%-- Separar no css e js correspondente após terminar a página --%>
         <style>
+            *{
+                margin: 0;
+                padding: 0;
+            }
+
+            body{
+                display: flex;
+                flex-direction: column;
+                height: 100vh;
+            }
+            main{
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content:flex-start;
+                align-items:center;
+            }
+
             .container-imagem{
                 width: 40vw;
                 height: 40vw;
@@ -48,6 +67,7 @@
                 display: flex;
                 justify-content:center;
                 align-items:center;
+                cursor:pointer;
             }
 
             #img-to-up{
@@ -65,6 +85,11 @@
             inputImagem.addEventListener('change',(evt)=>{
                 console.log(inputImagem.value)
                 previsualizacaoImagem.src = URL.createObjectURL(inputImagem.files[0]);
+            });
+
+            previsualizacaoImagem.addEventListener('click',()=>{
+                previsualizacaoImagem.setAttribute('style', 'background-color:blue');
+                inputImagem.click();
             });
 
             
@@ -86,8 +111,7 @@
                 let status = response.status;
 
                 if(status === 201){
-                    let modalImag = document.querySelector('.container-imagem');
-                    modalImag.style.backgroundColor = green;
+                    previsualizacaoImagem.setAttribute('style', 'background-color:green');
                     alert('Imagem enviada com sucesso!');
                 }else{
                     alert('Houve uma falha no envio, tente novamente mais tarde!');

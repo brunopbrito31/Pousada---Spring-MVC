@@ -37,7 +37,8 @@ public class ImageController {
         HttpServletRequest request
     ) throws URISyntaxException, IOException{
       
-        Image imageTemp = Image.builder().nameArq(name).title(title).build();
+        String extensionFile = file.getOriginalFilename().split("[.]")[1];
+        Image imageTemp = Image.builder().nameArq(name+"."+extensionFile).title(title).build();
 
         try{
             imageTemp = imageRepository.save(imageTemp);
