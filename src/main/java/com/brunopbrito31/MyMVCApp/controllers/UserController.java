@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.brunopbrito31.MyMVCApp.models.auxiliar.LivroTemp;
 import com.brunopbrito31.MyMVCApp.models.entities.FormUser;
 import com.brunopbrito31.MyMVCApp.models.entities.User;
 import com.brunopbrito31.MyMVCApp.models.entities.enums.StatusUser;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
@@ -130,5 +132,13 @@ public class UserController {
         }catch(RuntimeException e){
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+    // Testando o consumo de uma API Feita em Node
+    @GetMapping("/testes")
+    public ResponseEntity<List<LivroTemp>> getLivros(){
+        RestTemplate restTemplate = new RestTemplate();
+        List<LivroTemp> livros = (List<LivroTemp>) restTemplate.getForObject("http://localhost:5700/consultar", List.class);
+        return ResponseEntity.ok().body(livros);
     }
 }
