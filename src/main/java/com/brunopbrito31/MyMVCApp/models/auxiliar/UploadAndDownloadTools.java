@@ -13,6 +13,8 @@ public class UploadAndDownloadTools {
 
     private static final String DIR_TO_UPLOAD_IMAGE = DIR_TO_UPLOAD+"images\\";
 
+    private static final String DIR_TO_UPLOAD_IMAGE_ALTERNATIVE  = "Uploads";
+
     public static void uploadFile(
         MultipartFile file, 
         String relativePath, 

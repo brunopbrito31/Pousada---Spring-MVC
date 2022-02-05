@@ -83,7 +83,6 @@
                 </div>
             </form>
         </main>
-        <a href="/restrict-area/images-add">Adicionar Imagens na Galeria de Produto</a>
         <jsp:include page="/WEB-INF/views/includes/inc-bot-are-res.jsp" />
         <script src="/static/js/adm.js" defer></script>
     </body>

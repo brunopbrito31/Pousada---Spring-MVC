@@ -16,6 +16,7 @@ import com.brunopbrito31.MyMVCApp.models.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.hibernate5.SpringSessionContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
@@ -38,6 +41,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RestTemplate httpClient;
 
     // REST EndPoint
     @GetMapping
@@ -98,8 +104,8 @@ public class UserController {
         if(userSearched.isPresent()){
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             if(encoder.matches(password,userSearched.get().getPassword())  && password != null && password.length() > 0){
-                request.getSession().setAttribute("user", userSearched.get().getMail());
-                request.getSession().setAttribute("aut",userSearched.get().getAutho().ordinal());
+                RequestContextHolder.getRequestAttributes().setAttribute("user", userSearched.get().getMail(), RequestAttributes.SCOPE_SESSION);
+                RequestContextHolder.getRequestAttributes().setAttribute("aut", userSearched.get().getAutho().ordinal(), RequestAttributes.SCOPE_SESSION);
                 request.getSession().setMaxInactiveInterval(600);
                 response.sendRedirect("/restrict-area/dashboard");
             }
@@ -137,8 +143,8 @@ public class UserController {
     // Testando o consumo de uma API Feita em Node
     @GetMapping("/testes")
     public ResponseEntity<List<LivroTemp>> getLivros(){
-        RestTemplate restTemplate = new RestTemplate();
-        List<LivroTemp> livros = (List<LivroTemp>) restTemplate.getForObject("http://localhost:5700/consultar", List.class);
+        List<LivroTemp> livros = (List<LivroTemp>) httpClient.getForObject("http://localhost:5700/consultar", List.class);
+        System.out.println(livros);
         return ResponseEntity.ok().body(livros);
     }
 }

@@ -45,7 +45,7 @@ public class ResAreController {
         Model model
     ) throws IOException
     {
-        isAuthenticated(request,response);
+        // isAuthenticated(request,response);
         if(request.getSession().getAttribute("user") != null){
             model.addAttribute("idUsu",request.getSession().getAttribute("user").toString());
             model.addAttribute("cards", cardMenResAreRepository.findAll());
@@ -63,7 +63,7 @@ public class ResAreController {
         @RequestParam(defaultValue = "10") Integer pageSize,
         @RequestParam(defaultValue="") String content
     ) throws IOException{  
-        isAuthenticated(request,response);
+        // isAuthenticated(request,response);
 
         System.out.println("valor de content"+content);
 
@@ -146,7 +146,7 @@ public class ResAreController {
         @RequestParam(defaultValue = "0") Integer pageNo,
         @RequestParam(defaultValue = "10") Integer pageSize
     ) throws IOException{
-        isAuthenticated(request,response);
+        // isAuthenticated(request,response);
 
         Paginator paginator = new Paginator(
             pageNo,
@@ -172,20 +172,20 @@ public class ResAreController {
         HttpServletRequest request,
         HttpServletResponse response
     ) throws IOException{
-        isAuthenticated(request,response);
+        // isAuthenticated(request,response);
 
         model.addAttribute("config",initialPageRepository.findById(1l).get());
         return new ModelAndView("/area-restrita/adm");
     }
 
-    @GetMapping("/images-add")
-    public ModelAndView addImag(
+    @GetMapping("/galery")
+    public ModelAndView addImgToGalery(
         Model model,
         HttpServletRequest request,
         HttpServletResponse response
     ) throws IOException{
-        isAuthenticated(request, response);
-        return new ModelAndView("/area-restrita/galery-image-new");
+        // isAuthenticated(request, response);
+        return new ModelAndView("/area-restrita/galery-page");
     }
 
     @GetMapping("/logoff")
@@ -198,14 +198,14 @@ public class ResAreController {
         response.sendRedirect("/users/login");
     }
 
-    private void isAuthenticated(
-        HttpServletRequest request, 
-        HttpServletResponse response
-    ) throws IOException{
-        if(request.getSession().getAttribute("user") == null){
-            response.sendRedirect("/users/login");
-        }
-    }
+    // private void isAuthenticated(
+    //     HttpServletRequest request, 
+    //     HttpServletResponse response
+    // ) throws IOException{
+    //     if(request.getSession().getAttribute("user") == null){
+    //         response.sendRedirect("/users/login");
+    //     }
+    // }
 
     private Integer isAutSessionEmpty(HttpServletRequest req){
         if(req.getSession().getAttribute("aut") == null){
