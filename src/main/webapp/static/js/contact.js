@@ -1,4 +1,3 @@
-
 async function apagar(num){
     if(confirm("Deseja prosseguir com a exclusão?")){
         let response = await fetch(`http://localhost:8080/contacts/${num}`,{method:'DELETE'});

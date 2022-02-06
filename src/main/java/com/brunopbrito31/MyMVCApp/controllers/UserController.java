@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.brunopbrito31.MyMVCApp.models.auxiliar.LivroTemp;
 import com.brunopbrito31.MyMVCApp.models.entities.FormUser;
@@ -16,7 +16,6 @@ import com.brunopbrito31.MyMVCApp.models.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.orm.hibernate5.SpringSessionContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,8 +29,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
@@ -45,14 +42,14 @@ public class UserController {
     @Autowired
     private RestTemplate httpClient;
 
-    // REST EndPoint
+    // Rest: Lista todos os usuários
     @GetMapping
     public ResponseEntity<List<User>> getAll(){
         List<User> allUsers = userRepository.findAll();
         return allUsers.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(allUsers);
     }
 
-    // REST EndPoint for searches in index
+    // Rest: Procura o usuário pelo Id
     @GetMapping("/search-by-id")
     public ResponseEntity<User> findUserById(@RequestParam("id") Long id){
         Optional<User> searchedUser = userRepository.findById(id);
@@ -70,16 +67,16 @@ public class UserController {
             ResponseEntity.noContent().build();
     }
 
-    // Page of login
+    // Controller MVC : Página de Login
     @GetMapping("/login")
     public ModelAndView getLogin(
         @ModelAttribute("form") FormUser formUser,
         Model model,
-        HttpServletRequest request,
+        HttpSession session,
         HttpServletResponse response
     ) throws ServletException, IOException
     {
-        if(request.getSession().getAttribute("user") == null){
+        if(session.getAttribute("user") == null){
             model.addAttribute("formUser",formUser);
             model.addAttribute("error",false);
             return new ModelAndView("/area-restrita/login-pag");
@@ -89,32 +86,38 @@ public class UserController {
         return null;
     }
 
-    // Login attempts
+    // Controller MVC : Página de Login - Processamento do Login
     @PostMapping("/login")
     public ModelAndView validateLogin(
         @ModelAttribute("form") FormUser formUser,
         Model model,
-        HttpServletRequest request,
+        HttpSession session,
         HttpServletResponse response
     ) throws IOException{
+        // Usuário passado pelo formulário de login
         String user = formUser.getUser();
         String password = formUser.getPassword();
 
+        // Busca o usuário na base
         Optional<User> userSearched = userRepository.findByMail(user);
         if(userSearched.isPresent()){
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+            // Verifica se a senha passada é a mesma que está criptografada no banco 
             if(encoder.matches(password,userSearched.get().getPassword())  && password != null && password.length() > 0){
-                RequestContextHolder.getRequestAttributes().setAttribute("user", userSearched.get().getMail(), RequestAttributes.SCOPE_SESSION);
-                RequestContextHolder.getRequestAttributes().setAttribute("aut", userSearched.get().getAutho().ordinal(), RequestAttributes.SCOPE_SESSION);
-                request.getSession().setMaxInactiveInterval(600);
+                session.setAttribute("user", userSearched.get().getMail());
+                session.setAttribute("aut", userSearched.get().getAutho().ordinal());
+                session.setMaxInactiveInterval(600);
                 response.sendRedirect("/restrict-area/dashboard");
             }
         }
+        // Caso o usuário não exista ou a senha não seja a mesma do banco, retorna para a tela de login com mensagem de erro
         model.addAttribute("error",true);
         model.addAttribute("formUser",formUser);
         return new ModelAndView("/area-restrita/login-pag");
     }
 
+    // REST: Criação de Usuário
     @PostMapping("/save")
     public User saveUser(@RequestBody User user){
         System.out.println(user.getPassword());
@@ -123,10 +126,14 @@ public class UserController {
         return userRepository.save(user);
     }
 
+
+    // REST: Deleção de usuário (Muda o status dele no banco para inativo)
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUser (@PathVariable Long id){
         try{
             Optional<User> searchedUser = userRepository.findById(id);
+
+            // Caso o não haja um usuário no banco para o id informado retorna erro
             if(!searchedUser.isPresent()){
                 return ResponseEntity.badRequest().build();
             }
@@ -140,7 +147,7 @@ public class UserController {
         }
     }
 
-    // Testando o consumo de uma API Feita em Node
+    // REST: Testando o consumo de uma API Feita em Node (Teste de Integração de APIs)
     @GetMapping("/testes")
     public ResponseEntity<List<LivroTemp>> getLivros(){
         List<LivroTemp> livros = (List<LivroTemp>) httpClient.getForObject("http://localhost:5700/consultar", List.class);

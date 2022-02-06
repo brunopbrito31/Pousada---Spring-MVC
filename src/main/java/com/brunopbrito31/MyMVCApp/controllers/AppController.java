@@ -8,7 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.brunopbrito31.MyMVCApp.models.auxiliar.FormConverter;
 import com.brunopbrito31.MyMVCApp.models.auxiliar.MailGenerator;
@@ -62,8 +62,10 @@ public class AppController {
     @Autowired
     private UseTermRepository useTermRepository;
 
+    // Página Inicial
     @GetMapping
     public ModelAndView loadInitialPage(ModelMap model){
+        // Carrega as confirgurações de texto, imagens
         model.addAttribute("form",new Form());
         model.addAttribute("quartos", productRepository.findAll());
         model.addAttribute("config", initialPageRepository.findById(1l).get());
@@ -71,37 +73,40 @@ public class AppController {
         return new ModelAndView("index");
     }
 
+    // Processamento do envio do formulário de contato
     @PostMapping
     public ModelAndView processForm(
         @ModelAttribute("form") Form form,
         Model model,
-        HttpServletRequest request
+        HttpSession session
     ) throws ParseException, IOException{
 
-        // Protection for excessive submits, determines 1 minute for send more form
-        Date opdate = (Date)request.getSession().getAttribute("DataProxRes");
+        // Proteção contra robô, cadastramento repetitivo e automatizado
 
-        // First Send
+        Date opdate = (Date)session.getAttribute("DataProxRes");
+
+        // Primeiro envio, seta a data e horário do próximo envio como o atual
         if(opdate == null){
-            request.getSession().setAttribute("DataProxRes",Date.from(Instant.now()));
-            opdate = (Date)request.getSession().getAttribute("DataProxRes");
+            session.setAttribute("DataProxRes",Date.from(Instant.now()));
+            opdate = (Date)session.getAttribute("DataProxRes");
         }
 
         Long now = Date.from(Instant.now()).getTime();
         Long proRes = opdate.getTime(); 
 
+        // Verifica se já está habilitado para realizar outro envio
         if(proRes <= now ){
             User userResult;
             Optional<User> searchedUser = userRepository.findByMail(form.getMail());
     
-            // Verify user exists
+            // Verifica pelo email se o usuário já existe na base, em caso afirmativo recupera os dados do mesmo para associar ao contato
             if(searchedUser.isPresent()){
                 userResult = searchedUser.get();
     
             }else{
-                // User creation
+                // Criação de Usuário
 
-                // Adress Tratament
+                // Tratamento do endereço
                 Optional<Adress> oldAdress = adressRespository.findByZipCode(form.getZipPostal());
                 Adress adressAux;
                 if(oldAdress.isPresent()){
@@ -113,11 +118,12 @@ public class AppController {
                     .state(form.getState()).street(form.getStreet()).zipCode(form.getZipPostal()).build();
                     adressAux = adressRespository.save(adressAux);
                 }
-                // Phone Tratament
+                // Tratamento do telefone
                 Phone phoneAux = FormConverter.phoneMounterNoContentUser(form);
-                // Date Tratament
+            
                 Date formatedDate = FormConverter.StringToDate(form.getBirthDate());
-                
+            
+                // Finaliza a criação do usuário
                 userResult = User.builder()
                 .adress(adressAux).birthDate(formatedDate)
                 .gender(Gender.intToGender(form.getGender()))
@@ -132,18 +138,19 @@ public class AppController {
                 userResult.getPhones().add(phoneAux);
             }
     
-            // Creation of Contact
+            // Criação do Contato
             Contact contact = Contact.builder().msg(form.getMessage())
             .sendDate(Date.from(Instant.now())).user(userResult).status(StatusContact.OPENED).build();
             contact = contactRepository.save(contact);
     
+            // Definição da data e hora de permissão de próximo cadastro pelo usuário (1 Min após a conclusão do cadastro atual)
             Calendar cal = Calendar.getInstance();
             cal.setTime(Date.from(Instant.now()));
             cal.add(Calendar.MINUTE,1);
     
-            request.getSession().setAttribute("DataProxRes", cal.getTime());
+            session.setAttribute("DataProxRes", cal.getTime());
 
-            // Send mail
+            // Envia email confirmando o contato
             MailGenerator.sendMail(
                 "Olá "+userResult.getName()+" recebemos a sua mensagem e em até 2 dias úteis um de nossos consultores irá realizar contato contigo.", 
                 "Pousada Secreta: Mensagem Recebida Com Sucesso!", 
@@ -155,9 +162,10 @@ public class AppController {
             );
 
             model.addAttribute("config",initialPageRepository.findById(1l).get());
-           
             return new ModelAndView("form-sucess");
         }
+
+        // Caso haja uma tentativa de reenvio em menos de 1 min
         model.addAttribute("config",initialPageRepository.findById(1l).get());
         return new ModelAndView("form-fail");
     }

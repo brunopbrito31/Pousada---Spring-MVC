@@ -36,6 +36,7 @@ public class ContactController {
             ResponseEntity.ok().body(searchedContact.get());
     }
 
+    // API que desativa o contato na base
     @DeleteMapping("/{id}")
     public ResponseEntity<Contact> deleteContact(@PathVariable Long id){
 
@@ -50,6 +51,7 @@ public class ContactController {
         return ResponseEntity.noContent().build();
     }
 
+    // REST: API para resposta de contatos, Área Restrita, página de contatos -> Resposta
     @PostMapping("/response")
     public ResponseEntity sendResponseMail(
         @RequestParam("idcontact") Long idContact, 

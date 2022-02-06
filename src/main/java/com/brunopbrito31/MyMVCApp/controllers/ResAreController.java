@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.brunopbrito31.MyMVCApp.models.auxiliar.Paginator;
 import com.brunopbrito31.MyMVCApp.models.entities.Contact;
@@ -38,38 +38,38 @@ public class ResAreController {
     @Autowired
     private UserRepository userRepository;
 
+
+    // Página Inicial da Área Restrita
     @GetMapping("/dashboard")
     public ModelAndView getDash(
-        HttpServletRequest request, 
-        HttpServletResponse response, 
+        HttpSession session,
         Model model
     ) throws IOException
     {
-        // isAuthenticated(request,response);
-        if(request.getSession().getAttribute("user") != null){
-            model.addAttribute("idUsu",request.getSession().getAttribute("user").toString());
+        if(session.getAttribute("user") != null){
+            model.addAttribute("idUsu",session.getAttribute("user").toString());
             model.addAttribute("cards", cardMenResAreRepository.findAll());
-            model.addAttribute("userOn", request.getSession().getAttribute("user"));
+            model.addAttribute("userOn", session.getAttribute("user"));
         }
         return new ModelAndView("/area-restrita/dashboard");
     }
 
+    // Página de Listagem de contatos
     @GetMapping("/contacts")
     public ModelAndView getContactsList(
         Model model, 
-        HttpServletRequest request, 
-        HttpServletResponse response,
+        HttpSession session,
         @RequestParam(defaultValue = "0") Integer pageNo,
         @RequestParam(defaultValue = "10") Integer pageSize,
         @RequestParam(defaultValue="") String content
     ) throws IOException{  
-        // isAuthenticated(request,response);
 
-        System.out.println("valor de content"+content);
-
-        Integer aut = isAutSessionEmpty(request);
+        // Trecho para evitar erro quando um usuário não logado tentar acessar, mocka um valor fake na sessão para permitir o redirecionamento para a tela de login sem quebrar
+        Integer aut = isAutSessionEmpty(session);
         
         Long totalItems = 0l;
+
+        // Verifica o nível de Permissão do Usuário  para determinar o total de itens com base nos filtros de cada nível de usuário e pesquisa
         if( aut == 0){
             if(content.equals("")){
                 totalItems = contactRepository.persOpenCount(); 
@@ -93,6 +93,7 @@ public class ResAreController {
             totalItems
         );
 
+        // Verifica o nível de permissão do usuário para trazer a listagem correta do banco
         List<Contact> contacts = null; 
         if( aut == 0 ){
             if(content.equals("")){
@@ -131,29 +132,29 @@ public class ResAreController {
 
         model.addAttribute("content",content);
         model.addAttribute("dateFormater", sdf);
-        model.addAttribute("aut",request.getSession().getAttribute("aut"));
+        model.addAttribute("aut",session.getAttribute("aut"));
         model.addAttribute("contacts",contacts);
         model.addAttribute("pageNo",pageNo);
         model.addAttribute("qtPages",paginator.getQtPages());
         return new ModelAndView("/area-restrita/list-contacts");
     }
 
+    // Página de Usuários
     @GetMapping("/users")
     public ModelAndView getUsers(
         Model model,
-        HttpServletRequest request,
-        HttpServletResponse response,
         @RequestParam(defaultValue = "0") Integer pageNo,
         @RequestParam(defaultValue = "10") Integer pageSize
     ) throws IOException{
-        // isAuthenticated(request,response);
 
+        // Objeto de paginação
         Paginator paginator = new Paginator(
             pageNo,
             pageSize,
             userRepository.countActiveUsers()
         );
 
+        // Passa para view o valor da pagina atual, a quantidade de páginas e a lista de usuários a serem exibidos na pagina
         model.addAttribute("pageNo",pageNo);
         model.addAttribute("qtPages",paginator.getQtPages());
         model.addAttribute(
@@ -166,53 +167,37 @@ public class ResAreController {
         return new ModelAndView("/area-restrita/list-users");
     }
 
+    // Página de Configurações de texto da pagina inicial do site
     @GetMapping("/configurations")
     public ModelAndView getAdm(
-        Model model,
-        HttpServletRequest request,
-        HttpServletResponse response
+        Model model
     ) throws IOException{
-        // isAuthenticated(request,response);
-
         model.addAttribute("config",initialPageRepository.findById(1l).get());
         return new ModelAndView("/area-restrita/adm");
     }
 
+    // Página de Galeria de Imagens
     @GetMapping("/galery")
     public ModelAndView addImgToGalery(
-        Model model,
-        HttpServletRequest request,
-        HttpServletResponse response
+        Model model
     ) throws IOException{
-        // isAuthenticated(request, response);
         return new ModelAndView("/area-restrita/galery-page");
     }
 
+    // Logoff da Area Restrita
     @GetMapping("/logoff")
     public void getLogoff(
-        Model model,
-        HttpServletRequest request,
+        HttpSession session,
         HttpServletResponse response
     ) throws IOException{
-        request.getSession().invalidate();
+        session.invalidate();
         response.sendRedirect("/users/login");
     }
 
-    // private void isAuthenticated(
-    //     HttpServletRequest request, 
-    //     HttpServletResponse response
-    // ) throws IOException{
-    //     if(request.getSession().getAttribute("user") == null){
-    //         response.sendRedirect("/users/login");
-    //     }
-    // }
-
-    private Integer isAutSessionEmpty(HttpServletRequest req){
-        if(req.getSession().getAttribute("aut") == null){
-            return 0;
-        }else{
-            return Integer.parseInt(req.getSession().getAttribute("aut").toString());
-        }
+    // Condição para garantir o redirecionamento para a tela de login em algumas páginas caso o usuário esteja deslogado
+    private Integer isAutSessionEmpty(HttpSession session){
+        return session.getAttribute("aut") == null ? 0
+        : Integer.parseInt(session.getAttribute("aut").toString());
     }
     
 }
