@@ -78,7 +78,9 @@ public interface ContactRepository extends JpaRepository<Contact, Long>{
         +"where tb_contatos.status != 2 and tb_usuarios.nome LIKE %:filter% or tb_usuarios.email LIKE %:filter% order by data_envio, status LIMIT :start, :size ",
         nativeQuery = true
     )
-    List<Contact> findAllActiveContactsWithFilterNameOrMail(@Param("start")Integer startLimit, @Param("size")Integer pageSize, @Param("filter")String content);
+    List<Contact> findAllActiveContactsWithFilterNameOrMail(
+        @Param("start")Integer startLimit, 
+        @Param("size")Integer pageSize, @Param("filter")String content);
 
     @Query(
         value = 
@@ -112,7 +114,10 @@ public interface ContactRepository extends JpaRepository<Contact, Long>{
         +"where tb_contatos.status = 0 order by data_envio, status LIMIT :start, :size ",
         nativeQuery = true
     )
-    List<Contact> findAllActiveOpenContacts(@Param("start")Integer startLimit, @Param("size") Integer pageSize);
+    List<Contact> findAllActiveOpenContacts(
+        @Param("start")Integer startLimit, 
+        @Param("size") Integer pageSize
+    );
 
     @Query(
         value = 

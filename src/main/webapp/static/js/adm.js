@@ -30,7 +30,6 @@ async function atualizarConfigs(){
 
         let configurationsFetch = {
             method: 'POST', 
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         };
 

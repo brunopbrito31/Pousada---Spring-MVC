@@ -152,6 +152,18 @@
             if(localStorage.getItem("aceite-termo") != 1){
                 termo.style.display = 'flex';
             }
+
+            let calCheckIn = document.querySelector('#cal-icon');
+            let calChekOut = document.querySelector('#cal-icon-2');
+
+
+            calCheckIn.addEventListener('click', ()=>{
+                document.querySelector('#check-in').click();
+            });
+
+            calChekOut.addEventListener('click', ()=>{
+                document.querySelector('#check-out').click();
+            });
         })
     </script>
     <script src="/static/js/index.js" defer></script>

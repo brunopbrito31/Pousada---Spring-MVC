@@ -3,6 +3,7 @@ package com.brunopbrito31.MyMVCApp.controllers;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Blob;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -38,7 +39,7 @@ public class ImageController {
     ) throws URISyntaxException, IOException{
       
         String extensionFile = file.getOriginalFilename().split("[.]")[1];
-        Image imageTemp = Image.builder().nameArq(name+"."+extensionFile).title(title).build();
+        Image imageTemp = Image.builder().nameArq(name+"."+extensionFile).title(title).file(file.getBytes()).build();
 
         try{
             imageTemp = imageRepository.save(imageTemp);
